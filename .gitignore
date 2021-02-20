@@ -30,4 +30,3 @@ yarn-error.log*
 .env.production.local
 
 /.idea
-.DS_Store

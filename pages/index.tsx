@@ -1,6 +1,9 @@
-import Head from 'next/head'
+import Head from "next/head";
+import { signIn, signOut, useSession } from "next-auth/client";
 
 export default function Home() {
+  const [session, loading] = useSession();
+
   return (
     <div className="container">
       <Head>
@@ -9,6 +12,18 @@ export default function Home() {
       </Head>
 
       <main>
+        {!session && (
+          <>
+            Not signed in <br />
+            <button onClick={() => signIn()}>Sign in</button>
+          </>
+        )}
+        {session && (
+          <>
+            Signed in as {session.user.email} <br />
+            <button onClick={() => signOut()}>Sign out</button>
+          </>
+        )}
         <h1 className="title">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -54,7 +69,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>
@@ -205,5 +220,5 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
+  );
 }
