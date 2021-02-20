@@ -3,6 +3,11 @@ import { signIn, signOut, useSession } from "next-auth/client";
 
 export default function Home() {
   const [session, loading] = useSession();
+  console.log(123, session);
+
+  if (loading) {
+    return <>Loading...</>
+  }
 
   return (
     <div className="container">
@@ -14,13 +19,13 @@ export default function Home() {
       <main>
         {!session && (
           <>
-            Not signed in <br />
+            Not signed in <br /><br />
             <button onClick={() => signIn()}>Sign in</button>
           </>
         )}
         {session && (
           <>
-            Signed in as {session.user.email} <br />
+            Signed in as {session.user.name} <br /><br />
             <button onClick={() => signOut()}>Sign out</button>
           </>
         )}
