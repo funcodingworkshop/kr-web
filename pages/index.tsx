@@ -1,12 +1,13 @@
-import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/client";
+import Head from 'next/head';
+import { signIn, signOut, useSession } from 'next-auth/client';
+import Link from 'next/link';
 
 export default function Home() {
   const [session, loading] = useSession();
   console.log(123, session);
 
   if (loading) {
-    return <>Loading...</>
+    return <>Loading...</>;
   }
 
   return (
@@ -19,16 +20,25 @@ export default function Home() {
       <main>
         {!session && (
           <>
-            Not signed in <br /><br />
+            Not signed in <br />
+            <br />
             <button onClick={() => signIn()}>Sign in</button>
           </>
         )}
         {session && (
           <>
-            Signed in as {session.user.name} <br /><br />
+            Signed in as {session.user.name} <br />
+            <br />
             <button onClick={() => signOut()}>Sign out</button>
           </>
         )}
+        <div style={{ color: 'red', border: '1px solid', margin: 10 }}>
+          <strong>
+            <Link href={'/test_redux_SSG'}>
+              <a>Examples page: redux states</a>
+            </Link>
+          </strong>
+        </div>
         <h1 className="title">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -74,7 +84,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{" "}
+          Powered by{' '}
           <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>
