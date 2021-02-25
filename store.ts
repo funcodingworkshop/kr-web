@@ -1,19 +1,19 @@
-import { useMemo } from 'react';
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { IState, initialState, reducer } from './reducers/reducer';
+import { useMemo } from "react";
+import { createStore, applyMiddleware, Store } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { rootReducer, IRootState } from "./redux/reducers";
 
-let store: any;
+let store: Store<IRootState>;
 
-function initStore(preloadedState = initialState) {
+function initStore(preloadedState: IRootState) {
   return createStore(
-    reducer,
+    rootReducer,
     preloadedState,
     composeWithDevTools(applyMiddleware())
   );
 }
 
-export const initializeStore = (preloadedState: any) => {
+export const initializeStore = (preloadedState: IRootState) => {
   let _store = store ?? initStore(preloadedState);
 
   // After navigating to a page with an initial Redux state, merge that state
@@ -28,14 +28,14 @@ export const initializeStore = (preloadedState: any) => {
   }
 
   // For SSG and SSR always create a new store
-  if (typeof window === 'undefined') return _store;
+  if (typeof window === "undefined") return _store;
   // Create the store once in the client
   if (!store) store = _store;
 
   return _store;
 };
 
-export function useStore(initialState: IState) {
+export function useStore(initialState: IRootState) {
   const store = useMemo(() => initializeStore(initialState), [initialState]);
   return store;
 }

@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import { signIn, signOut, useSession } from 'next-auth/client';
-import Link from 'next/link';
+import Head from "next/head";
+import { signIn, signOut, useSession } from "next-auth/client";
+import Link from "next/link";
 
 export default function Home() {
   const [session, loading] = useSession();
@@ -32,9 +32,9 @@ export default function Home() {
             <button onClick={() => signOut()}>Sign out</button>
           </>
         )}
-        <div style={{ color: 'red', border: '1px solid', margin: 10 }}>
+        <div style={{ color: "red", border: "1px solid", margin: 10 }}>
           <strong>
-            <Link href={'/test_redux_SSG'}>
+            <Link href={"/test_redux_SSG"}>
               <a>Examples page: redux states</a>
             </Link>
           </strong>
@@ -84,7 +84,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>

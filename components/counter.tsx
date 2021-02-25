@@ -1,20 +1,16 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import {
+  incrementAC,
+  decrementAC,
+  resetAC,
+} from "../redux/actions/testActions";
 
 const useCounter = () => {
-  const count = useSelector((state: any) => state.count);
+  const count = useSelector((state: any) => state.test.count);
   const dispatch = useDispatch();
-  const increment = () =>
-    dispatch({
-      type: 'INCREMENT',
-    });
-  const decrement = () =>
-    dispatch({
-      type: 'DECREMENT',
-    });
-  const reset = () =>
-    dispatch({
-      type: 'RESET',
-    });
+  const increment = () => dispatch(incrementAC());
+  const decrement = () => dispatch(decrementAC());
+  const reset = () => dispatch(resetAC());
   return { count, increment, decrement, reset };
 };
 

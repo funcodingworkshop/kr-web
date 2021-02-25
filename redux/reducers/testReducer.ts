@@ -1,34 +1,36 @@
-export interface IState {
+import { TestActionTypes } from "../actions/testActions";
+
+export interface ITestState {
   lastUpdate: number;
   light: boolean;
   count: number;
 }
 
-export const initialState: IState = {
+export const initialState: ITestState = {
   lastUpdate: 0,
   light: false,
   count: 0,
 };
 
-export const reducer = (state = initialState, action: any) => {
+export const testReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case 'TICK':
+    case TestActionTypes.TICK:
       return {
         ...state,
         lastUpdate: action.lastUpdate,
         light: !!action.light,
       };
-    case 'INCREMENT':
+    case TestActionTypes.INCREMENT:
       return {
         ...state,
         count: state.count + 1,
       };
-    case 'DECREMENT':
+    case TestActionTypes.DECREMENT:
       return {
         ...state,
         count: state.count - 1,
       };
-    case 'RESET':
+    case TestActionTypes.RESET:
       return {
         ...state,
         count: initialState.count,
