@@ -1,10 +1,52 @@
-import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/client";
-import Link from "next/link";
+import Head from 'next/head';
+import { signIn, signOut, useSession } from 'next-auth/client';
+import Link from 'next/link';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { updateUserAC, updateLoaderAC } from '../redux/actions/appActions';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
+
+interface IUser {
+  email: string;
+  password: string;
+}
 
 export default function Home() {
   const [session, loading] = useSession();
+  const dispatch = useDispatch();
+
+  const addNewUser = async (newUser: IUser) => {
+    const response = await axios.post('/api/test_userPOST', newUser);
+    return response.data;
+  };
   console.log(123, session);
+
+  if (session) {
+    const user = {
+      email: session.user.email,
+      password: 'qwerty',
+      name: session.user.name,
+    };
+    console.log('USER', user);
+    dispatch(updateUserAC(session.user.email));
+    dispatch(updateLoaderAC(true));
+    addNewUser(user)
+      .then((data) => {
+        console.log(data.message);
+      })
+      .catch((e) => {
+        console.log('Error: ', e.message);
+      });
+  }
+
+  // const cookies = Cookies.get('next-auth.session-token');
+  // const cookies1 = Cookies.get('next-auth.csrf-token');
+
+  // useEffect(() => {
+  //   const cookies = Cookies.get('next-auth.session-token');
+  //   console.log('Cookies: ', cookies);
+  // }, []);
 
   if (loading) {
     return <>Loading...</>;
@@ -32,10 +74,17 @@ export default function Home() {
             <button onClick={() => signOut()}>Sign out</button>
           </>
         )}
-        <div style={{ color: "red", border: "1px solid", margin: 10 }}>
+        <div style={{ color: 'red', border: '1px solid', margin: 10 }}>
           <strong>
-            <Link href={"/test_redux_SSG"}>
+            <Link href={'/test_redux_SSG'}>
               <a>Examples page: redux states</a>
+            </Link>
+          </strong>
+        </div>
+        <div style={{ color: 'red', border: '1px solid', margin: 10 }}>
+          <strong>
+            <Link href={'/test_mongo'}>
+              <a>Test page: MongoDB connect with auth</a>
             </Link>
           </strong>
         </div>
@@ -84,7 +133,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{" "}
+          Powered by{' '}
           <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>

@@ -1,5 +1,5 @@
-import Page from "../components/page";
-import { IRootState } from "../redux/reducers";
+import Page from '../components/page';
+import { IRootState } from '../redux/reducers';
 
 export default function SSG() {
   return <Page />;
@@ -7,7 +7,7 @@ export default function SSG() {
 
 const initialReduxState: IRootState = {
   app: {
-    currentUser: "Unknown2",
+    currentUser: 'Unknown2',
     loading: false,
   },
   test: { lastUpdate: Date.now(), light: false, count: 0 },
