@@ -3,19 +3,25 @@ import { Provider } from 'react-redux';
 import { Provider as SessionProvider } from 'next-auth/client';
 import { useStore } from '../store';
 import Cookies from 'js-cookie';
+import React from 'react';
 
 export default function App({ Component, pageProps }: AppProps) {
-  const store = useStore(pageProps.initialReduxState);
+    const store = useStore(pageProps.initialReduxState);
 
-  const cookies = Cookies.get();
+    const cookies = Cookies.get();
 
-  console.log('Cookies: ', cookies);
+    // console.log('Cookies: ', cookies);
+    console.log('pageProps.session', pageProps.session);
 
-  return (
-    <Provider store={store}>
-      <SessionProvider session={pageProps.session}>
-        <Component {...pageProps} />
-      </SessionProvider>
-    </Provider>
-  );
+    React.useEffect(() => {
+        // console.log('on _app component mount');
+    });
+
+    return (
+        <Provider store={store}>
+            <SessionProvider session={pageProps.session}>
+                <Component {...pageProps} />
+            </SessionProvider>
+        </Provider>
+    );
 }

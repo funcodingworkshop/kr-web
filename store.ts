@@ -6,7 +6,7 @@ import { rootReducer, IRootState } from './redux/reducers';
 let store: Store<IRootState>;
 
 function initStore(preloadedState: IRootState) {
-  console.log(111111, preloadedState);
+  // console.log(111111, preloadedState);
   return createStore(
     rootReducer,
     preloadedState,

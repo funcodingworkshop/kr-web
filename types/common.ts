@@ -24,5 +24,5 @@ export type InferValueTypes<T> = T extends { [key: string]: infer U }
 export type InferThenArg<T> = T extends Promise<infer U>
     ? U
     : T extends (...args: any[]) => Promise<infer U>
-        ? U
-        : T;
+    ? U
+    : T;
