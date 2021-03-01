@@ -13,11 +13,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
             const { email, password, name } = req.body;
 
-            console.log(req.body);
-
             const candidate = await User.findOne({ email: email });
             if (candidate) {
-                // res.statusCode = 400;
                 res.json({ message: 'User already exists' });
                 return;
             }
@@ -31,7 +28,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             const usercreated = await newUser.save();
-            return res.status(200).send(usercreated);
+            res.statusCode = 200;
+            res.json({ message: 'New user added' });
+            return;
+
+            // return res.status(200).send(usercreated);
         } catch (error) {
             return res.status(500).send(error.message);
         }
