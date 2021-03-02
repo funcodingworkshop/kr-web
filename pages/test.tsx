@@ -1,9 +1,9 @@
 import Layout from '../components/layout';
 type TProps = {};
 
-export default function Homepage(props: TProps) {
+export default function Home(props: TProps) {
     return (
-        <Layout title="Homepage">
+        <Layout title="Home">
             <p>Lorem Ipsum.....</p>
         </Layout>
     );
