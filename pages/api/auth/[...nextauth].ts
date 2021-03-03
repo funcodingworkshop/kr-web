@@ -3,6 +3,8 @@ import Providers from 'next-auth/providers';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TUserSession } from '../../../types/userSession';
+import UserModel from '../../../models/user';
+import {connectDB} from "../../../middleware/connectDB";
 
 const options = {
     providers: [
@@ -59,26 +61,15 @@ const options = {
         },
 
         async session(session: TUserSession, token: any) {
-            // HERE we can call database to add some data into session
-
+            await connectDB();
             if (session) {
-                const { email } = session.user;
-
-                const getUserInfo = async () => {
-                    try {
-                        const response = await axios.get(
-                            'http://localhost:3000/api/getUserInfo',
-                            {
-                                params: { email },
-                            }
-                        );
-                        return response.data;
-                    } catch (e) {
-                        console.error(e);
-                    }
-                };
-                const userId = await getUserInfo();
-                session.databaseId = userId.userId;
+                try {
+                    const { email } = session.user;
+                    const user = await UserModel.findOne({ email });
+                    session.databaseId = user._id;
+                } catch (error) {
+                    console.error(error);
+                }
             }
             session.someInfo = 'testing';
             return session;
