@@ -1,10 +1,10 @@
 import NextAuth, { User } from 'next-auth';
 import Providers from 'next-auth/providers';
-import axios from 'axios';
+import bcrypt from 'bcryptjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TUserSession } from '../../../types/userSession';
 import UserModel from '../../../models/user';
-import {connectDB} from "../../../middleware/connectDB";
+import { connectDB } from '../../../middleware/connectDB';
 
 const options = {
     providers: [
@@ -19,35 +19,33 @@ const options = {
     ],
     callbacks: {
         async signIn(user: User, account: any, profile: any) {
-            // TODO: save to database a new user
-            // console.log('TODO save to database a new user', user, account);
+            await connectDB();
 
-            const addNewUser = async (newUser: any) => {
-                try {
-                    const response = await axios.post(
-                        'http://localhost:3000/api/addNewUser',
-                        newUser
-                    );
-                    return response.data;
-                } catch (e) {
-                    console.error(e);
-                }
-            };
-
-            const newUser = {
-                email: user.email,
-                password: 'qwerty',
-                name: user.name,
-            };
-            console.log('New User: ', newUser);
-
-            addNewUser(newUser)
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch((e) => {
-                    console.log('Error: ', e.message);
+            try {
+                const candidate = await UserModel.findOne({
+                    email: user.email,
                 });
+
+                if (candidate) {
+                    console.log('User already exists');
+                    return;
+                }
+                //пароль оставил чтобы не менять схему в БД
+                const salt = bcrypt.genSaltSync(10);
+                const passwordHash = bcrypt.hashSync('qwerty', salt);
+
+                const newUser = new UserModel({
+                    email: user.email,
+                    passwordHash,
+                    name: user.name,
+                });
+
+                await newUser.save();
+                console.log('New user added');
+                return;
+            } catch (e) {
+                console.error(e);
+            }
 
             const isAllowedToSignIn = true;
             if (isAllowedToSignIn) {

@@ -34,7 +34,8 @@ export default function Layout({ children, title }: TProps) {
                 if (session) {
                     console.log(
                         'additional info from the server: ',
-                        session.someInfo
+                        session.someInfo,
+                        session
                     );
                     dispatch(updateIsLoggedInAC(ELoggedIn.True));
                     dispatch(
