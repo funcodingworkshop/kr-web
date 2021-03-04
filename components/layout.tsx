@@ -22,6 +22,7 @@ export default function Layout({ children, title }: TProps) {
     const currentEmail = useSelector(
         (state: IRootState) => state.app.currentEmail
     );
+    const currentId = useSelector((state: IRootState) => state.app.currentId);
     const isLoggedIn = useSelector((state: IRootState) => state.app.isLoggedIn);
     console.log({ isLoggedIn });
 
@@ -33,16 +34,21 @@ export default function Layout({ children, title }: TProps) {
                 if (session) {
                     console.log(
                         'additional info from the server: ',
-                        session.someInfo
+                        session.someInfo,
+                        session
                     );
                     dispatch(updateIsLoggedInAC(ELoggedIn.True));
                     dispatch(
-                        updateUserAC(session.user.name, session.user.email)
+                        updateUserAC(
+                            session.user.name,
+                            session.user.email,
+                            session.databaseId
+                        )
                     );
                 } else {
                     console.log('NO session!!!', session);
                     dispatch(updateIsLoggedInAC(ELoggedIn.False));
-                    dispatch(updateUserAC(undefined, undefined));
+                    dispatch(updateUserAC(undefined, undefined, undefined));
                 }
             })();
         }

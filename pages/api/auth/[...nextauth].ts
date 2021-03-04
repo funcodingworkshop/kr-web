@@ -1,6 +1,10 @@
-import NextAuth, { User, Session } from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import Providers from 'next-auth/providers';
+import bcrypt from 'bcryptjs';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { TUserSession } from '../../../types/userSession';
+import UserModel from '../../../models/user';
+import { connectDB } from '../../../middleware/connectDB';
 
 const options = {
     providers: [
@@ -15,8 +19,34 @@ const options = {
     ],
     callbacks: {
         async signIn(user: User, account: any, profile: any) {
-            // TODO: save to database a new user
-            console.log('TODO save to database a new user', user, account);
+            await connectDB();
+
+            try {
+                const candidate = await UserModel.findOne({
+                    email: user.email,
+                });
+
+                if (candidate) {
+                    console.log('User already exists');
+                    return;
+                }
+                //пароль оставил чтобы не менять схему в БД
+                const salt = bcrypt.genSaltSync(10);
+                const passwordHash = bcrypt.hashSync('qwerty', salt);
+
+                const newUser = new UserModel({
+                    email: user.email,
+                    passwordHash,
+                    name: user.name,
+                });
+
+                await newUser.save();
+                console.log('New user added');
+                return;
+            } catch (e) {
+                console.error(e);
+            }
+
             const isAllowedToSignIn = true;
             if (isAllowedToSignIn) {
                 return true;
@@ -27,8 +57,18 @@ const options = {
                 // return '/unauthorized'
             }
         },
-        async session(session: Session & { someInfo: string }, token: any) {
-            // HERE we can call database to add some data into session
+
+        async session(session: TUserSession, token: any) {
+            await connectDB();
+            if (session) {
+                try {
+                    const { email } = session.user;
+                    const user = await UserModel.findOne({ email });
+                    session.databaseId = user._id;
+                } catch (error) {
+                    console.error(error);
+                }
+            }
             session.someInfo = 'testing';
             return session;
         },
@@ -36,6 +76,5 @@ const options = {
 };
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
-    // @ts-ignore
     return NextAuth(req, res, options);
 };
