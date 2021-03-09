@@ -15,8 +15,8 @@ export const PAGES = {
         title: 'Test Redux Page',
     },
     testMongo: {
-        id: 'testMongo',
-        path: '/test_mongo',
-        title: 'Test Mongo Page',
+        id: 'testMongoMUI',
+        path: '/test_mui',
+        title: 'Test Mongo & MUI Integration Page',
     },
 };
