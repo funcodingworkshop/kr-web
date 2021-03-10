@@ -23,6 +23,9 @@ export default function Layout({ children, title }: TProps) {
         (state: IRootState) => state.app.currentEmail
     );
     const currentId = useSelector((state: IRootState) => state.app.currentId);
+    const currentRole = useSelector(
+        (state: IRootState) => state.app.currentRole
+    );
     const isLoggedIn = useSelector((state: IRootState) => state.app.isLoggedIn);
     console.log({ isLoggedIn });
 
@@ -42,13 +45,16 @@ export default function Layout({ children, title }: TProps) {
                         updateUserAC(
                             session.user.name,
                             session.user.email,
-                            session.databaseId
+                            session.databaseId,
+                            session.role
                         )
                     );
                 } else {
                     console.log('NO session!!!', session);
                     dispatch(updateIsLoggedInAC(ELoggedIn.False));
-                    dispatch(updateUserAC(undefined, undefined, undefined));
+                    dispatch(
+                        updateUserAC(undefined, undefined, undefined, undefined)
+                    );
                 }
             })();
         }
@@ -70,7 +76,8 @@ export default function Layout({ children, title }: TProps) {
             </header>
             {isLoggedIn === ELoggedIn.True && (
                 <div>
-                    Signed in as {currentUser} with {currentEmail}
+                    Signed in as {currentUser} with {currentEmail} your role is{' '}
+                    {currentRole}
                 </div>
             )}
             {isLoggedIn !== ELoggedIn.Unknown && (

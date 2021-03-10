@@ -6,6 +6,7 @@ export interface IAppState {
     currentUser: string;
     currentEmail: string;
     currentId: string;
+    currentRole: string;
     isLoggedIn: ELoggedIn;
 }
 
@@ -14,6 +15,7 @@ export const initialState: IAppState = {
     currentUser: undefined,
     currentEmail: undefined,
     currentId: undefined,
+    currentRole: undefined,
     isLoggedIn: ELoggedIn.Unknown,
 };
 
@@ -25,6 +27,7 @@ export const appReducer = (state = initialState, action: any) => {
                 currentUser: action.currentUser,
                 currentEmail: action.currentEmail,
                 currentId: action.currentId,
+                currentRole: action.currentRole,
             };
         case AppActionTypes.UPDATE_LOADER:
             return {
