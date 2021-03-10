@@ -63,7 +63,7 @@ const options = {
             if (session) {
                 try {
                     const { email } = session.user;
-                    const user: any = await UserModel.findOne({ email });
+                    const user = await UserModel.findOne({ email });
                     session.databaseId = user._id;
                     session.role = user.role;
                 } catch (error) {
