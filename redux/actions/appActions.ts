@@ -9,12 +9,14 @@ export enum AppActionTypes {
 export const updateUserAC = (
     currentUser: string,
     currentEmail: string,
-    currentId: string
+    currentId: string,
+    currentRole: string
 ) => ({
     type: AppActionTypes.UPDATE_USER,
     currentUser,
     currentEmail,
     currentId,
+    currentRole,
 });
 
 export const updateLoaderAC = (loading: boolean) => ({

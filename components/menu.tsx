@@ -25,6 +25,12 @@ const Menu = () => {
                     <a>{PAGES.testMongo.title}</a>
                 </Link>
             </div>
+            <div className="menuItem">
+                <Link href={PAGES.adminpage.path}>
+                    <a>{PAGES.adminpage.title}</a>
+                </Link>
+            </div>
+
             <style jsx>{`
                 .menuItemBlock {
                     padding: 16px;

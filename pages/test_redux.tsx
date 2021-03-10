@@ -17,7 +17,8 @@ const initialReduxState: IRootState = {
         currentEmail: 'unknown@email.com',
         loading: false,
         isLoggedIn: ELoggedIn.Unknown,
-        currentId: "unknown"
+        currentId: 'unknown',
+        currentRole: 'unknown',
     },
     test: { lastUpdate: Date.now(), light: false, count: 0 },
 };

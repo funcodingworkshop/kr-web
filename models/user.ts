@@ -1,7 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 const Schema = mongoose.Schema;
 
-const user = new Schema({
+interface IUser extends Document {
+    email: string;
+    passwordHash: string;
+    role: string;
+    date: string;
+    name: string;
+}
+
+const user = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     passwordHash: {
         type: String,
