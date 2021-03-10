@@ -1,4 +1,5 @@
 import { signIn, signOut } from 'next-auth/client';
+import { Button } from '@material-ui/core';
 
 type TProps = {
     isSignedIn: boolean;
@@ -13,8 +14,24 @@ const SignInButtons = ({ isSignedIn }: TProps) => {
     };
     return (
         <div>
-            {!isSignedIn && <button onClick={handleSignIn}>Sign in</button>}
-            {isSignedIn && <button onClick={handleSignOut}>Sign out</button>}
+            {!isSignedIn && (
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={handleSignIn}
+                >
+                    Sign in
+                </Button>
+            )}
+            {isSignedIn && (
+                <Button
+                    color="primary"
+                    variant="outlined"
+                    onClick={handleSignOut}
+                >
+                    Sign out
+                </Button>
+            )}
             <style jsx>{`
                 div {
                     margin: 15px;
