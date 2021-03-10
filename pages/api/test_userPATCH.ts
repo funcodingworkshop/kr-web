@@ -10,13 +10,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 res.end('Error: insufficient data');
                 return;
             }
-            const { role, name } = req.body;
+            const { role, name, email } = req.body;
 
             console.log(req.body);
- 
+
+            const candidate = await User.findOne({ email: email });
+            if (candidate) {
             const result = await User.updateOne(
               { role, name },)
-             return res.json(result);
+            return res.json(result);
+            }
+            
         } catch (error) {
             return res.status(500).send(error.message);
         }
