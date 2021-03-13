@@ -26,7 +26,8 @@ const user = new Schema<IUser>({
     name: String,
 });
 
-//to avoid overwrite errror???
+// to avoid overwrite errror???
+// @ts-ignore
 mongoose.models = {};
 
 const User = mongoose.model('User', user);
