@@ -33,7 +33,7 @@ export const EditForm = ({ id, email }: any) => {
             };
             console.log('updateUser!!!', updateUser);
             const res = await axios.put(
-                'http://localhost:3000/api/updateUser',
+                `${process.env.RESTURL}/api/updateUser`,
                 updateUser
             );
             console.log(res.data);
