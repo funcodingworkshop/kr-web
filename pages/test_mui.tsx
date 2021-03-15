@@ -47,7 +47,7 @@ export default function TestMui({ list }: any) {
 }
 
 TestMui.getInitialProps = async () => {
-    const resp = await fetch('http://localhost:3000/api/test_mongoGET');
+    const resp = await fetch(`${process.env.RESTURL}/api/test_mongoGET`);
     const json = await resp.json();
     return { list: json };
 };
