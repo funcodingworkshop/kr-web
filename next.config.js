@@ -22,14 +22,14 @@ module.exports = (phase) => {
         RESTURL: (() => {
             if (isDev) return 'http://localhost:3000';
             if (isProd) {
-                return 'https://kr-web.klishevich.ru';
+                return 'http://kr-web.klishevich.ru';
             }
             if (isStaging) return 'http://localhost:3000';
             return 'RESTURL:not (isDev,isProd && !isStaging,isProd && isStaging)';
         })(),
         RESTURL_SESSIONS: (() => {
             if (isDev) return 'http://localhost:3000/sessions';
-            if (isProd) return 'https://kr-web.klishevich.com/sessions';
+            if (isProd) return 'http://kr-web.klishevich.ru/sessions';
             if (isStaging) return 'http://localhost:3000';
             return 'RESTURL_SESSIONS:not (isDev,isProd && !isStaging,isProd && isStaging)';
         })(),
