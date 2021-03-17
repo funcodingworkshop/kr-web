@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import User from '../../models/user';
 import connectDB from '../../middleware/database';
 
+console.log('!!!!!TEST');
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
         try {
