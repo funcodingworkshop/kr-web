@@ -24,4 +24,9 @@ export const PAGES = {
         path: '/admin',
         title: 'Admin page',
     },
+    tutorpage: {
+        id: 'tutorpage',
+        path: '/tutor',
+        title: 'Tutor page',
+    },
 };

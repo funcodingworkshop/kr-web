@@ -30,6 +30,11 @@ const Menu = () => {
                     <a>{PAGES.adminpage.title}</a>
                 </Link>
             </div>
+            <div className="menuItem">
+                <Link href={PAGES.tutorpage.path}>
+                    <a>{PAGES.tutorpage.title}</a>
+                </Link>
+            </div>
 
             <style jsx>{`
                 .menuItemBlock {

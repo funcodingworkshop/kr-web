@@ -1,12 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import User from '../../models/user';
+import mongoose from 'mongoose';
+import Course from '../../models/course';
 import connectDB from '../../middleware/database';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
         try {
-            const users = await User.find({});
-            res.json({ Users: users });
+            mongoose.model('User');
+            const courses = await Course.find({}).populate('student');
+
+            if (!courses) {
+                return null;
+            }
+            res.json({ courses });
         } catch (error) {
             return res.status(500).send(error.message);
         }
