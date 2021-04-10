@@ -4,11 +4,11 @@ import SessionCourse from '../../models/sessionCourse';
 import connectDB from '../../middleware/database';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    if (req.method === 'GET') {
+    if (req.method === 'POST') {
         try {
             mongoose.model('Course');
             const sessionCourse = await SessionCourse.find({
-                course: '6068c364c8e7b6159a5fc09d',
+                course: req.body,
             }).populate('course');
 
             if (!sessionCourse) {

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Layout from '../../../components/layout';
 import SessionsList from '../../../components/SessionsList';
+import { ERole } from '../../../types/ERole';
 
 export default function ShowSessions({ data }: any) {
     const [session, loading] = useSession();
@@ -23,7 +24,7 @@ export default function ShowSessions({ data }: any) {
             </Layout>
         );
     }
-    if (session.role === 'student') {
+    if (session.role === ERole.Student) {
         return (
             <Layout title="Tutor profile">
                 <h1>You must be an admin or tutor to see this page</h1>;
@@ -40,7 +41,13 @@ export default function ShowSessions({ data }: any) {
 }
 
 export async function getServerSideProps(context: any) {
-    const res = await fetch(`${process.env.RESTURL}/api/list_of_sessions_GET`);
+    const res = await fetch(
+        `${process.env.RESTURL}/api/list_of_sessions_POST`,
+        {
+            method: 'POST',
+            body: context.params.sid,
+        }
+    );
     const data = await res.json();
 
     if (!data) {

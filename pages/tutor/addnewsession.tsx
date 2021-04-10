@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '../../components/layout';
 import { useSession } from 'next-auth/client';
 import { AddNewSessionForm } from '../../components/AddNewSessionForm';
+import { ERole } from '../../types/ERole';
 
 type TProps = {};
 
@@ -15,7 +16,7 @@ export default function AddNewSession(props: TProps) {
             </Layout>
         );
     }
-    if (session.role === 'student') {
+    if (session.role === ERole.Student) {
         return (
             <Layout title="Tutor profile">
                 <h1>You must be an admin or tutor to see this page</h1>;

@@ -8,6 +8,7 @@ import {
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Layout from '../../components/layout';
+import { ERole } from '../../types/ERole';
 
 type TProps = {};
 
@@ -22,7 +23,7 @@ export default function AddNewCourse(props: TProps) {
             </Layout>
         );
     }
-    if (session.role === 'student') {
+    if (session.role === ERole.Student) {
         return (
             <Layout title="Tutor profile">
                 <h1>You must be an admin or tutor to see this page</h1>;
@@ -36,19 +37,16 @@ export default function AddNewCourse(props: TProps) {
         comment: '',
     });
 
-    const [
-        selectedDateStart,
-        setSelectedDateStart,
-    ] = React.useState<Date | null>(new Date());
-
-    const [selectedDateEnd, setSelectedDateEnd] = React.useState<Date | null>(
-        null
+    const [selectedDateStart, setSelectedDateStart] = React.useState<Date>(
+        new Date()
     );
 
-    const handleDateStartChange = (date: Date | null) => {
+    const [selectedDateEnd, setSelectedDateEnd] = React.useState<Date>(null);
+
+    const handleDateStartChange = (date: Date) => {
         setSelectedDateStart(date);
     };
-    const handleDateEndChange = (date: Date | null) => {
+    const handleDateEndChange = (date: Date) => {
         setSelectedDateEnd(date);
     };
 

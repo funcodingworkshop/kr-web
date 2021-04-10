@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import Course from '../../models/course';
 import connectDB from '../../middleware/database';
+import { ERole } from '../../types/ERole';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req });
@@ -12,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    if (session.role === 'student') {
+    if (session.role === ERole.Student) {
         res.send({
             error: 'You need to be an admin or tutor',
         });

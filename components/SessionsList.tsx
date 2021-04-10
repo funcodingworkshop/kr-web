@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
-import { IAddSessionState } from '../redux/reducers/addSessionReducer';
 import { EditFormSession } from './EditFormSession';
 
 export default function SessionList({ course }: any) {

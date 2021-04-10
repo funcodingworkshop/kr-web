@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import User from '../../models/user';
 import connectDB from '../../middleware/database';
+import { ERole } from '../../types/ERole';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const session = await getSession({ req });
@@ -12,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    if (session.role !== 'admin') {
+    if (session.role !== ERole.Admin) {
         res.send({
             error: 'You need to be an admin',
         });

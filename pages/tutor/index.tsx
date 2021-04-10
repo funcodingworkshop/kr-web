@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/client';
 import Link from 'next/link';
 import Layout from '../../components/layout';
 import CourseList from '../../components/CourseList';
+import { ERole } from '../../types/ERole';
 
 export default function TutorPage({ data }: any) {
     const [session, loading] = useSession();
@@ -15,7 +16,7 @@ export default function TutorPage({ data }: any) {
             </Layout>
         );
     }
-    if (session.role === 'student') {
+    if (session.role === ERole.Student) {
         return (
             <Layout title="Tutor profile">
                 <h1>You must be an admin or tutor to see this page</h1>;
