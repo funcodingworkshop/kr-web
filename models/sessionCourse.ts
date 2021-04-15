@@ -21,6 +21,6 @@ const sessionCourse = new Schema<ISessionCourse>({
 // @ts-ignore
 mongoose.models = {};
 
-const SessionCourse = mongoose.model('Session', sessionCourse);
+const SessionCourse = mongoose.model('SessionCourse', sessionCourse);
 
 export default SessionCourse;
