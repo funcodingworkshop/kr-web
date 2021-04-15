@@ -8,10 +8,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         try {
             mongoose.model('User');
-            // const studentSessions = await Course.find({
-            //     student: req.body,
-            // }).populate('student');
-
             const studentSessions = await SessionCourse.find({}).populate({
                 path: 'course',
                 model: 'Course',
@@ -22,11 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
             });
 
-            console.log('!!!DB Query', studentSessions[0].course.student);
-
             const myCourses = studentSessions.filter((el) => el.course.student);
-
-            console.log('mycourses', myCourses);
 
             if (!studentSessions) {
                 return null;

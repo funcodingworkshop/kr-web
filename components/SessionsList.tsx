@@ -95,6 +95,23 @@ export default function SessionList({ course }: any) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <hr />
+            {data &&
+                data.map((el: any) => (
+                    <div>
+                        <h1>{el.description}</h1>
+                        <h4>{el.date}</h4>
+                        <iframe
+                            width="560"
+                            height="315"
+                            src={el.videolink}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+                ))}
         </>
     );
 }
