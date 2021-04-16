@@ -1,19 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import mongoose from 'mongoose';
 import Course from '../../models/course';
+import User from '../../models/user';
 import SessionCourse from '../../models/sessionCourse';
 import connectDB from '../../middleware/database';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         try {
-            mongoose.model('User');
+            console.log('BODY!!!!', req.body);
+            // mongoose.model('Course');
+            // mongoose.model('User');
+
             const studentSessions = await SessionCourse.find({}).populate({
                 path: 'course',
-                model: 'Course',
+                model: Course,
                 populate: {
                     path: 'student',
-                    model: 'User',
+                    model: User,
                     match: { _id: req.body },
                 },
             });

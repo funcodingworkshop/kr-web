@@ -36,10 +36,15 @@ export default function Student({ data }: any) {
 }
 
 export async function getServerSideProps(ctx: any) {
+    console.log('ctx', ctx.params.student_sess);
+
     const res = await fetch(`${process.env.RESTURL}/api/sessionsList_POST`, {
         method: 'POST',
         body: ctx.params.student_sess,
     });
+
+    console.log('!!!!!!', res);
+
     const data = await res.json();
 
     if (!data) {
