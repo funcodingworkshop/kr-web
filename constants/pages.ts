@@ -5,9 +5,9 @@ export const PAGES = {
         title: 'Homepage',
     },
     profile: {
-        id: 'profile',
-        path: '/profile',
-        title: 'User Profile',
+        id: 'students',
+        path: '/students',
+        title: 'Student Page',
     },
     testRedux: {
         id: 'testRedux',
@@ -23,5 +23,10 @@ export const PAGES = {
         id: 'adminpage',
         path: '/admin',
         title: 'Admin page',
+    },
+    tutorpage: {
+        id: 'tutorpage',
+        path: '/tutor',
+        title: 'Tutor page',
     },
 };

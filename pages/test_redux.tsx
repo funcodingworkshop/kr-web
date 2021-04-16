@@ -21,6 +21,7 @@ const initialReduxState: IRootState = {
         currentRole: 'unknown',
     },
     test: { lastUpdate: Date.now(), light: false, count: 0 },
+    addSession: { id: null, name: null },
 };
 
 // If you build and start the app, the date returned here will have the same

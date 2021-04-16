@@ -1,6 +1,8 @@
+import { ERole } from './ERole';
+
 export type TUserSession = {
     databaseId: string;
-    role: string;
+    role: ERole | string;
     expires: string;
     someInfo: string;
     user: {

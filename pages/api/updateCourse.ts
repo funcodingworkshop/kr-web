@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import User from '../../models/user';
+import Course from '../../models/course';
 import connectDB from '../../middleware/database';
 import { ERole } from '../../types/ERole';
 
@@ -13,40 +13,40 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    if (session.role !== ERole.Admin) {
+    if (session.role === ERole.Student) {
         res.send({
-            error: 'You need to be an admin',
+            error: 'You need to be an admin or tutor',
         });
         return;
     }
 
     if (req.method === 'PUT') {
         try {
-            const { id, name, role } = req.body;
-            console.log(id, name, role);
-            if (!name && !role) {
+            const { id, status, comment } = req.body;
+
+            if (!status && !comment) {
                 return res.status(400).send({ message: 'Insufficient data' });
-            } else if (!name) {
-                const updatetUser = await User.findByIdAndUpdate(
+            } else if (!status) {
+                const updatedCourse = await Course.findByIdAndUpdate(
                     id,
-                    { role },
+                    { comment },
                     { new: true }
                 );
-                return res.json(updatetUser);
-            } else if (!role) {
-                const updatetUser = await User.findByIdAndUpdate(
+                return res.json(updatedCourse);
+            } else if (!comment) {
+                const updatedCourse = await Course.findByIdAndUpdate(
                     id,
-                    { name },
+                    { status },
                     { new: true }
                 );
-                return res.json(updatetUser);
+                return res.json(updatedCourse);
             } else {
-                const updatetUser = await User.findByIdAndUpdate(
+                const updatedCourse = await Course.findByIdAndUpdate(
                     id,
-                    { name, role },
+                    { status, comment },
                     { new: true }
                 );
-                return res.json(updatetUser);
+                return res.json(updatedCourse);
             }
         } catch (error) {
             return res.status(500).send(error.message);
