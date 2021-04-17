@@ -40,6 +40,8 @@ export default function TutorPage({ data }: any) {
 
 export async function getServerSideProps() {
     const res = await fetch(`${process.env.RESTURL}/api/list_of_course_GET`);
+    console.log('RES', res);
+
     const data = await res.json();
 
     if (!data) {
@@ -47,7 +49,6 @@ export async function getServerSideProps() {
             notFound: true,
         };
     }
-
     return {
         props: { data }, // will be passed to the page component as props
     };

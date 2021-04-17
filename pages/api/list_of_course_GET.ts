@@ -6,7 +6,7 @@ import connectDB from '../../middleware/database';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
         try {
-            mongoose.model('User');
+            mongoose.model('UserInfo');
             const courses = await Course.find({}).populate('student');
 
             if (!courses) {

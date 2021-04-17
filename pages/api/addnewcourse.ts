@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import Course from '../../models/course';
 import connectDB from '../../middleware/database';
-import User from '../../models/user';
+import UserInfo from '../../models/userInfo';
 import { ERole } from '../../types/ERole';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -37,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     .status(400)
                     .send({ message: 'Student name must be provided' });
             }
-            const findUser = await User.findOne({ name: String(student) });
+            const findUser = await UserInfo.findOne({ name: String(student) });
 
             if (!findUser) {
                 return res.status(400).send({
@@ -46,7 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
 
             const newCourse = await Course.create({
-                student: await User.findOne({ name: String(student) }),
+                student: await UserInfo.findOne({ name: String(student) }),
                 dateStart: selectedDateStart,
                 dateEnd: selectedDateEnd,
                 status,

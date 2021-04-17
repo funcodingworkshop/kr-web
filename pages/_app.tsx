@@ -20,10 +20,6 @@ export default function App({ Component, pageProps }: AppProps) {
         }
     }, []);
 
-    // React.useEffect(() => {
-    //     // console.log('on _app component mount');
-    // });
-
     return (
         <ThemeProvider theme={theme}>
             <Provider store={store}>

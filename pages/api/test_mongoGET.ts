@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import User from '../../models/user';
+import UserInfo from '../../models/userInfo';
 import connectDB from '../../middleware/database';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
         try {
-            const users = await User.find({});
+            const users = await UserInfo.find({});
             res.json({ Users: users });
         } catch (error) {
             return res.status(500).send(error.message);
