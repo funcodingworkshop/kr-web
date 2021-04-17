@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSession } from 'next-auth/client';
 import Link from 'next/link';
+import { GetServerSideProps } from 'next';
 import Layout from '../../components/layout';
 import CourseList from '../../components/CourseList';
 import { ERole } from '../../types/ERole';
@@ -38,7 +39,7 @@ export default function TutorPage({ data }: any) {
     );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
     const res = await fetch(`${process.env.RESTURL}/api/list_of_course_GET`);
     console.log('RES', res);
 
@@ -52,4 +53,4 @@ export async function getServerSideProps() {
     return {
         props: { data }, // will be passed to the page component as props
     };
-}
+};

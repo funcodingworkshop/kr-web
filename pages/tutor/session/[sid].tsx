@@ -1,4 +1,5 @@
 import React from 'react';
+import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -40,7 +41,7 @@ export default function ShowSessions({ data }: any) {
     );
 }
 
-export async function getServerSideProps(context: any) {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
     const res = await fetch(
         `${process.env.RESTURL}/api/list_of_sessions_POST`,
         {
@@ -59,4 +60,4 @@ export async function getServerSideProps(context: any) {
     return {
         props: { data }, // will be passed to the page component as props
     };
-}
+};

@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import Layout from '../../components/layout';
 import { ERole } from '../../types/ERole';
 import StudentSessions from '../../components/StudentSessions';
@@ -35,7 +36,7 @@ export default function Student({ data }: any) {
     );
 }
 
-export async function getServerSideProps(ctx: any) {
+export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
     const res = await fetch(`${process.env.RESTURL}/api/sessionsList_POST`, {
         method: 'POST',
         body: ctx.params.student_sess,
@@ -51,4 +52,4 @@ export async function getServerSideProps(ctx: any) {
     return {
         props: { data }, // will be passed to the page component as props
     };
-}
+};
