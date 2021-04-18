@@ -5,10 +5,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import UserInfo from '../models/userInfo';
+import { GetServerSideProps } from 'next';
+import { connectDB } from '../middleware/connectDB';
 import Layout from '../components/layout';
 
-export default function TestMui({ list }: any) {
-    const newList = list.Users;
+export default function TestMui({ res }: any) {
+    const newList = JSON.parse(res);
 
     return (
         <Layout title="Test Mongo and MUI integration">
@@ -46,8 +49,20 @@ export default function TestMui({ list }: any) {
     );
 }
 
-TestMui.getInitialProps = async () => {
-    const resp = await fetch(`${process.env.RESTURL}/api/test_mongoGET`);
-    const json = await resp.json();
-    return { list: json };
+export const getServerSideProps: GetServerSideProps = async () => {
+    await connectDB();
+    try {
+        const data = await UserInfo.find({});
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+        const res = JSON.stringify(data);
+        return {
+            props: { res }, // will be passed to the page component as props
+        };
+    } catch (e) {
+        console.error(e);
+    }
 };

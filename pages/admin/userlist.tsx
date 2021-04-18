@@ -11,8 +11,13 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import { EditForm } from '../../components/EditForm';
 import { useSession } from 'next-auth/client';
+import UserInfo from '../../models/userInfo';
+import { GetServerSideProps } from 'next';
+import { connectDB } from '../../middleware/connectDB';
 
-export default function Userlist({ list }: any) {
+export default function Userlist({ res }: any) {
+    const list = JSON.parse(res);
+
     const [visible, setVisible] = useState(false);
     const [id, setId] = useState('');
     const [email, setEmail] = useState('');
@@ -60,7 +65,7 @@ export default function Userlist({ list }: any) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list.Users.map((row: any) => (
+                            {list.map((row: any) => (
                                 <TableRow key={row._id}>
                                     <TableCell component="th" scope="row">
                                         {row.email}
@@ -93,8 +98,20 @@ export default function Userlist({ list }: any) {
     );
 }
 
-Userlist.getInitialProps = async () => {
-    const resp = await fetch(`${process.env.RESTURL}/api/test_mongoGET`);
-    const json = await resp.json();
-    return { list: json };
+export const getServerSideProps: GetServerSideProps = async () => {
+    await connectDB();
+    try {
+        const data = await UserInfo.find({});
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+        const res = JSON.stringify(data);
+        return {
+            props: { res }, // will be passed to the page component as props
+        };
+    } catch (e) {
+        console.error(e);
+    }
 };

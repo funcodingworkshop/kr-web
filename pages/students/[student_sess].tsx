@@ -4,14 +4,18 @@ import { GetServerSideProps } from 'next';
 import Layout from '../../components/layout';
 import { ERole } from '../../types/ERole';
 import StudentSessions from '../../components/StudentSessions';
+import Course from '../../models/course';
+import UserInfo from '../../models/userInfo';
+import SessionCourse from '../../models/sessionCourse';
+import { connectDB } from '../../middleware/connectDB';
 
 type TProps = {};
 
-export default function Student({ data }: any) {
+export default function Student({ res }: any) {
     const [session, loading] = useSession();
     const router = useRouter();
 
-    const mySessions = data.myCourses;
+    const mySessions = JSON.parse(res);
 
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
@@ -37,19 +41,30 @@ export default function Student({ data }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
-    const res = await fetch(`${process.env.RESTURL}/api/sessionsList_POST`, {
-        method: 'POST',
-        body: ctx.params.student_sess,
-    });
+    await connectDB();
+    try {
+        const studentSessions = await SessionCourse.find({}).populate({
+            path: 'course',
+            model: Course,
+            populate: {
+                path: 'student',
+                model: UserInfo,
+                match: { _id: ctx.params.student_sess },
+            },
+        });
 
-    const data = await res.json();
+        const data = studentSessions.filter((el) => el.course.student);
 
-    if (!data) {
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+        const res = JSON.stringify(data);
         return {
-            notFound: true,
+            props: { res }, // will be passed to the page component as props
         };
+    } catch (e) {
+        console.error(e);
     }
-    return {
-        props: { data }, // will be passed to the page component as props
-    };
 };

@@ -3,14 +3,21 @@ import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import mongoose from 'mongoose';
+import SessionCourse from '../../../models/sessionCourse';
 import Layout from '../../../components/layout';
 import SessionsList from '../../../components/SessionsList';
+import { connectDB } from '../../../middleware/connectDB';
 import { ERole } from '../../../types/ERole';
 
-export default function ShowSessions({ data }: any) {
+export default function ShowSessions({ res }: any) {
     const [session, loading] = useSession();
     const router = useRouter();
     const { sid } = router.query;
+
+    const data = JSON.parse(res);
+
+    console.log('1111111', data);
 
     const name = useSelector(
         //@ts-ignore
@@ -42,22 +49,25 @@ export default function ShowSessions({ data }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    const res = await fetch(
-        `${process.env.RESTURL}/api/list_of_sessions_POST`,
-        {
-            method: 'POST',
-            body: context.params.sid,
+    await connectDB();
+
+    try {
+        mongoose.model('Course');
+        const data = await SessionCourse.find({
+            course: context.params.sid,
+        }).populate('course');
+
+        if (!data) {
+            return {
+                notFound: true,
+            };
         }
-    );
-    const data = await res.json();
 
-    if (!data) {
+        const res = JSON.stringify(data);
         return {
-            notFound: true,
+            props: { res }, // will be passed to the page component as props
         };
+    } catch (e) {
+        console.error(e);
     }
-
-    return {
-        props: { data }, // will be passed to the page component as props
-    };
 };

@@ -18,8 +18,6 @@ export default function SessionList({ course }: any) {
     const [visible, setVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
 
-    const data = course.sessionCourse;
-
     const handleEdit = (id: string) => {
         setId(id);
         setVisible(true);
@@ -52,8 +50,8 @@ export default function SessionList({ course }: any) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data &&
-                            data.map((row: any) => (
+                        {course &&
+                            course.map((row: any) => (
                                 <TableRow key={row._id}>
                                     <TableCell align="right">
                                         {row.description}
@@ -96,9 +94,9 @@ export default function SessionList({ course }: any) {
                 </Table>
             </TableContainer>
             <hr />
-            {data &&
-                data.map((el: any) => (
-                    <div>
+            {course &&
+                course.map((el: any, index: any) => (
+                    <div key={index}>
                         <h1>{el.description}</h1>
                         <h4>{el.date}</h4>
                         <iframe

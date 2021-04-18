@@ -5,9 +5,13 @@ import { GetServerSideProps } from 'next';
 import Layout from '../../components/layout';
 import CourseList from '../../components/CourseList';
 import { ERole } from '../../types/ERole';
+import { connectDB } from '../../middleware/connectDB';
+import mongoose from 'mongoose';
+import Course from '../../models/course';
 
-export default function TutorPage({ data }: any) {
+export default function TutorPage({ res }: any) {
     const [session, loading] = useSession();
+    const data = JSON.parse(res);
 
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
@@ -28,7 +32,7 @@ export default function TutorPage({ data }: any) {
     return (
         <Layout title="Tutor profile">
             <h1>Courses</h1>
-            <CourseList courses={data.courses} />
+            <CourseList courses={data} />
 
             <h1>
                 <Link href="/tutor/addnewcourse">
@@ -40,17 +44,21 @@ export default function TutorPage({ data }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const res = await fetch(`${process.env.RESTURL}/api/list_of_course_GET`);
-    console.log('RES', res);
+    await connectDB();
+    try {
+        mongoose.model('UserInfo');
+        const data = await Course.find({}).populate('student');
 
-    const data = await res.json();
-
-    if (!data) {
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+        const res = JSON.stringify(data);
         return {
-            notFound: true,
+            props: { res }, // will be passed to the page component as props
         };
+    } catch (e) {
+        console.error(e);
     }
-    return {
-        props: { data }, // will be passed to the page component as props
-    };
 };
