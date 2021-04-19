@@ -15,8 +15,22 @@ import UserInfo from '../../models/userInfo';
 import { GetServerSideProps } from 'next';
 import { connectDB } from '../../middleware/connectDB';
 
-export default function Userlist({ res }: any) {
-    const list = JSON.parse(res);
+export interface UserListProps {
+    res: string | undefined;
+}
+
+export interface IListOfUsers {
+    date: Date;
+    email: string;
+    image: string;
+    name: string;
+    role: string;
+    __v: string;
+    _id: string;
+}
+
+export default function Userlist({ res }: UserListProps) {
+    const list: IListOfUsers[] = JSON.parse(res);
 
     const [visible, setVisible] = useState(false);
     const [id, setId] = useState('');
@@ -65,31 +79,35 @@ export default function Userlist({ res }: any) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list.map((row: any) => (
-                                <TableRow key={row._id}>
-                                    <TableCell component="th" scope="row">
-                                        {row.email}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {row.role}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton
-                                            color="primary"
-                                            aria-label="upload picture"
-                                            component="span"
-                                            onClick={() =>
-                                                handleEdit(row._id, row.email)
-                                            }
-                                        >
-                                            <EditIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            {list &&
+                                list.map((row) => (
+                                    <TableRow key={row._id}>
+                                        <TableCell component="th" scope="row">
+                                            {row.email}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {row.role}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                color="primary"
+                                                aria-label="upload picture"
+                                                component="span"
+                                                onClick={() =>
+                                                    handleEdit(
+                                                        row._id,
+                                                        row.email
+                                                    )
+                                                }
+                                            >
+                                                <EditIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

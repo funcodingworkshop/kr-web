@@ -9,13 +9,38 @@ import UserInfo from '../../models/userInfo';
 import SessionCourse from '../../models/sessionCourse';
 import { connectDB } from '../../middleware/connectDB';
 
-type TProps = {};
+export interface StudentListProps {
+    res: string | undefined;
+}
 
-export default function Student({ res }: any) {
+export interface IStudentSess {
+    course: {
+        comment: string | undefined;
+        dateEnd: Date | null;
+        dateStart: Date;
+        status: string | undefined;
+        _id: string;
+        student: {
+            date: Date;
+            email: string;
+            image: string;
+            name: string;
+            role: string;
+            _id: string;
+        };
+    };
+    date: Date;
+    description: string;
+    feedback: string;
+    videolink: string;
+    _id: string;
+}
+
+export default function Student({ res }: StudentListProps) {
     const [session, loading] = useSession();
     const router = useRouter();
 
-    const mySessions = JSON.parse(res);
+    const mySessions: IStudentSess[] = JSON.parse(res);
 
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
@@ -40,7 +65,7 @@ export default function Student({ res }: any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
     await connectDB();
     try {
         const studentSessions = await SessionCourse.find({}).populate({

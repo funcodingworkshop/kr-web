@@ -9,9 +9,29 @@ import { connectDB } from '../../middleware/connectDB';
 import mongoose from 'mongoose';
 import Course from '../../models/course';
 
-export default function TutorPage({ res }: any) {
+export interface TutorPageProps {
+    res: string | undefined;
+}
+
+export interface ITutorData {
+    comment: string | undefined;
+    dateEnd: Date | null;
+    dateStart: Date;
+    status: string | undefined;
+    _id: string;
+    student: {
+        date: Date;
+        email: string;
+        image: string;
+        name: string;
+        role: string;
+        _id: string;
+    };
+}
+
+export default function TutorPage({ res }: TutorPageProps) {
     const [session, loading] = useSession();
-    const data = JSON.parse(res);
+    const data: ITutorData[] = JSON.parse(res);
 
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {

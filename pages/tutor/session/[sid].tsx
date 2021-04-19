@@ -10,12 +10,31 @@ import SessionsList from '../../../components/SessionsList';
 import { connectDB } from '../../../middleware/connectDB';
 import { ERole } from '../../../types/ERole';
 
-export default function ShowSessions({ res }: any) {
+export interface ShowSessionsProps {
+    res: string | undefined;
+}
+
+export interface ISessionsList {
+    course: {
+        comment: string | undefined;
+        dateEnd: Date | null;
+        dateStart: Date;
+        status: string | undefined;
+        _id: string;
+    };
+    date: Date;
+    description: string;
+    feedback: string;
+    videolink: string;
+    _id: string;
+}
+
+export default function ShowSessions({ res }: ShowSessionsProps) {
     const [session, loading] = useSession();
     const router = useRouter();
     const { sid } = router.query;
 
-    const data = JSON.parse(res);
+    const data: ISessionsList[] = JSON.parse(res);
 
     console.log('1111111', data);
 
@@ -48,7 +67,7 @@ export default function ShowSessions({ res }: any) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     await connectDB();
 
     try {

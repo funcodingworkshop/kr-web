@@ -14,7 +14,26 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import { EditFormSession } from './EditFormSession';
 
-export default function SessionList({ course }: any) {
+export interface SessionListProps {
+    course: ISessionsList[] | undefined;
+}
+
+export interface ISessionsList {
+    course: {
+        comment: string | undefined;
+        dateEnd: Date | null;
+        dateStart: Date;
+        status: string | undefined;
+        _id: string;
+    };
+    date: Date;
+    description: string;
+    feedback: string;
+    videolink: string;
+    _id: string;
+}
+
+export default function SessionList({ course }: SessionListProps) {
     const [visible, setVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
 
@@ -51,7 +70,7 @@ export default function SessionList({ course }: any) {
                     </TableHead>
                     <TableBody>
                         {course &&
-                            course.map((row: any) => (
+                            course.map((row) => (
                                 <TableRow key={row._id}>
                                     <TableCell align="right">
                                         {row.description}
@@ -95,7 +114,7 @@ export default function SessionList({ course }: any) {
             </TableContainer>
             <hr />
             {course &&
-                course.map((el: any, index: any) => (
+                course.map((el, index) => (
                     <div key={index}>
                         <h1>{el.description}</h1>
                         <h4>{el.date}</h4>
