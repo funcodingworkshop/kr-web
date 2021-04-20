@@ -9,7 +9,7 @@ import UserInfo from '../../models/userInfo';
 import SessionCourse from '../../models/sessionCourse';
 import { connectDB } from '../../middleware/connectDB';
 
-export interface StudentListProps {
+export interface IStudentListProps {
     res: string | undefined;
 }
 
@@ -36,7 +36,7 @@ export interface IStudentSess {
     _id: string;
 }
 
-export default function Student({ res }: StudentListProps) {
+export default function Student({ res }: IStudentListProps) {
     const [session, loading] = useSession();
     const router = useRouter();
 

@@ -10,7 +10,7 @@ import SessionsList from '../../../components/SessionsList';
 import { connectDB } from '../../../middleware/connectDB';
 import { ERole } from '../../../types/ERole';
 
-export interface ShowSessionsProps {
+export interface IShowSessionsProps {
     res: string | undefined;
 }
 
@@ -29,14 +29,12 @@ export interface ISessionsList {
     _id: string;
 }
 
-export default function ShowSessions({ res }: ShowSessionsProps) {
+export default function ShowSessions({ res }: IShowSessionsProps) {
     const [session, loading] = useSession();
     const router = useRouter();
     const { sid } = router.query;
 
     const data: ISessionsList[] = JSON.parse(res);
-
-    console.log('1111111', data);
 
     const name = useSelector(
         //@ts-ignore
