@@ -2,8 +2,7 @@ import React from 'react';
 import SignInButtons from './auth/sign_in_buttons';
 import { getSession } from 'next-auth/client';
 import { IRootState } from '../redux/reducers';
-
-import Menu from './menu';
+import LeftMenu from './LeftMenu';
 import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import { ELoggedIn } from '../types/ELoggedIn';
@@ -72,18 +71,19 @@ export default function Layout({ children, title }: TProps) {
                 />
             </Head>
             <header>
-                <Menu />
+                <LeftMenu />
             </header>
-            {isLoggedIn === ELoggedIn.True && (
-                <div>
-                    Signed in as {currentUser} with {currentEmail} your role is{' '}
-                    {currentRole}
-                </div>
-            )}
-            {isLoggedIn !== ELoggedIn.Unknown && (
-                <SignInButtons isSignedIn={isLoggedIn === ELoggedIn.True} />
-            )}
             <main>
+                {isLoggedIn === ELoggedIn.True && (
+                    <div>
+                        Signed in as {currentUser} with {currentEmail} your role
+                        is {currentRole}
+                    </div>
+                )}
+                {isLoggedIn !== ELoggedIn.Unknown && (
+                    <SignInButtons isSignedIn={isLoggedIn === ELoggedIn.True} />
+                )}
+
                 <h1>{title}</h1>
                 <div style={{ flexGrow: 1 }}>{children}</div>
             </main>
@@ -103,6 +103,7 @@ export default function Layout({ children, title }: TProps) {
                 }
 
                 main {
+                    padding-top: 0.5rem;
                     flex: 1;
                     display: flex;
                     flex-direction: column;

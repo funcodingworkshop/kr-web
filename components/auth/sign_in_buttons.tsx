@@ -16,8 +16,8 @@ const SignInButtons = ({ isSignedIn }: TProps) => {
         <div>
             {!isSignedIn && (
                 <Button
-                    color="primary"
-                    variant="outlined"
+                    color="secondary"
+                    variant="contained"
                     onClick={handleSignIn}
                 >
                     Sign in
@@ -25,8 +25,8 @@ const SignInButtons = ({ isSignedIn }: TProps) => {
             )}
             {isSignedIn && (
                 <Button
-                    color="primary"
-                    variant="outlined"
+                    color="secondary"
+                    variant="contained"
                     onClick={handleSignOut}
                 >
                     Sign out

@@ -30,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <SessionProvider session={pageProps.session}>
                     <CssBaseline />
                     <Component {...pageProps} />
+                    
                 </SessionProvider>
             </Provider>
         </ThemeProvider>
