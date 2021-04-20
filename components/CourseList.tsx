@@ -19,7 +19,27 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { EditFormCourse } from './EditFormCourse';
 import { add_session } from '../redux/actions/addSessionActions';
 
-export default function CourseList({ courses }: any) {
+export interface CourseListProps {
+    courses: ITutorData[] | undefined;
+}
+
+export interface ITutorData {
+    comment: string | undefined;
+    dateEnd: Date | null;
+    dateStart: Date;
+    status: string | undefined;
+    _id: string;
+    student: {
+        date: Date;
+        email: string;
+        image: string;
+        name: string;
+        role: string;
+        _id: string;
+    };
+}
+
+export default function CourseList({ courses }: CourseListProps) {
     const dispatch = useDispatch();
 
     const [visible, setVisible] = useState<boolean>(false);
@@ -70,7 +90,7 @@ export default function CourseList({ courses }: any) {
                     </TableHead>
                     <TableBody>
                         {courses &&
-                            courses.map((row: any) => (
+                            courses.map((row) => (
                                 <TableRow key={row._id}>
                                     <TableCell component="th" scope="row">
                                         {row.student.name}

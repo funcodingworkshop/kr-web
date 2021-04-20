@@ -1,35 +1,29 @@
 import mongoose, { Document } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface IUser extends Document {
+interface IUserInfo extends Document {
     email: string;
-    passwordHash: string;
     role: string;
-    date: string;
     name: string;
+    image: string;
+    date: Date;
 }
 
-const user = new Schema<IUser>({
+const userInfo = new Schema<IUserInfo>({
     email: { type: String, required: true, unique: true },
-    passwordHash: {
-        type: String,
-        required: true,
-    },
     role: {
         type: String,
         default: 'student',
     },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
     name: String,
+    image: String,
+    date: Date,
 });
 
 // to avoid overwrite errror???
 // @ts-ignore
 mongoose.models = {};
 
-const User = mongoose.model('User', user);
+const UserInfo = mongoose.model('UserInfo', userInfo);
 
-export default User;
+export default UserInfo;

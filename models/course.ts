@@ -10,7 +10,7 @@ interface ICourse extends Document {
 }
 
 const course = new Schema<ICourse>({
-    student: { type: Schema.Types.ObjectId, ref: 'User' },
+    student: { type: Schema.Types.ObjectId, ref: 'UserInfo' },
     status: String,
     comment: String,
     dateStart: Date,

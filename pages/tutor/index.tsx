@@ -1,12 +1,37 @@
 import React from 'react';
 import { useSession } from 'next-auth/client';
 import Link from 'next/link';
+import { GetServerSideProps } from 'next';
 import Layout from '../../components/layout';
 import CourseList from '../../components/CourseList';
 import { ERole } from '../../types/ERole';
+import { connectDB } from '../../middleware/connectDB';
+import mongoose from 'mongoose';
+import Course from '../../models/course';
 
-export default function TutorPage({ data }: any) {
+export interface TutorPageProps {
+    res: string | undefined;
+}
+
+export interface ITutorData {
+    comment: string | undefined;
+    dateEnd: Date | null;
+    dateStart: Date;
+    status: string | undefined;
+    _id: string;
+    student: {
+        date: Date;
+        email: string;
+        image: string;
+        name: string;
+        role: string;
+        _id: string;
+    };
+}
+
+export default function TutorPage({ res }: TutorPageProps) {
     const [session, loading] = useSession();
+    const data: ITutorData[] = JSON.parse(res);
 
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
@@ -27,7 +52,7 @@ export default function TutorPage({ data }: any) {
     return (
         <Layout title="Tutor profile">
             <h1>Courses</h1>
-            <CourseList courses={data.courses} />
+            <CourseList courses={data} />
 
             <h1>
                 <Link href="/tutor/addnewcourse">
@@ -38,17 +63,22 @@ export default function TutorPage({ data }: any) {
     );
 }
 
-export async function getServerSideProps() {
-    const res = await fetch(`${process.env.RESTURL}/api/list_of_course_GET`);
-    const data = await res.json();
+export const getServerSideProps: GetServerSideProps = async () => {
+    await connectDB();
+    try {
+        mongoose.model('UserInfo');
+        const data = await Course.find({}).populate('student');
 
-    if (!data) {
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+        const res = JSON.stringify(data);
         return {
-            notFound: true,
+            props: { res }, // will be passed to the page component as props
         };
+    } catch (e) {
+        console.error(e);
     }
-
-    return {
-        props: { data }, // will be passed to the page component as props
-    };
-}
+};

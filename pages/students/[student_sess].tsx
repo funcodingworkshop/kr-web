@@ -1,16 +1,46 @@
 import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import Layout from '../../components/layout';
 import { ERole } from '../../types/ERole';
 import StudentSessions from '../../components/StudentSessions';
+import Course from '../../models/course';
+import UserInfo from '../../models/userInfo';
+import SessionCourse from '../../models/sessionCourse';
+import { connectDB } from '../../middleware/connectDB';
 
-type TProps = {};
+export interface IStudentListProps {
+    res: string | undefined;
+}
 
-export default function Student({ data }: any) {
+export interface IStudentSess {
+    course: {
+        comment: string | undefined;
+        dateEnd: Date | null;
+        dateStart: Date;
+        status: string | undefined;
+        _id: string;
+        student: {
+            date: Date;
+            email: string;
+            image: string;
+            name: string;
+            role: string;
+            _id: string;
+        };
+    };
+    date: Date;
+    description: string;
+    feedback: string;
+    videolink: string;
+    _id: string;
+}
+
+export default function Student({ res }: IStudentListProps) {
     const [session, loading] = useSession();
     const router = useRouter();
 
-    const mySessions = data.myCourses;
+    const mySessions: IStudentSess[] = JSON.parse(res);
 
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
@@ -35,24 +65,31 @@ export default function Student({ data }: any) {
     );
 }
 
-export async function getServerSideProps(ctx: any) {
-    console.log('ctx', ctx.params.student_sess);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    await connectDB();
+    try {
+        const studentSessions = await SessionCourse.find({}).populate({
+            path: 'course',
+            model: Course,
+            populate: {
+                path: 'student',
+                model: UserInfo,
+                match: { _id: ctx.params.student_sess },
+            },
+        });
 
-    const res = await fetch(`${process.env.RESTURL}/api/sessionsList_POST`, {
-        method: 'POST',
-        body: ctx.params.student_sess,
-    });
+        const data = studentSessions.filter((el) => el.course.student);
 
-    console.log('!!!!!!', res);
-
-    const data = await res.json();
-
-    if (!data) {
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+        const res = JSON.stringify(data);
         return {
-            notFound: true,
+            props: { res }, // will be passed to the page component as props
         };
+    } catch (e) {
+        console.error(e);
     }
-    return {
-        props: { data }, // will be passed to the page component as props
-    };
-}
+};

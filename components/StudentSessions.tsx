@@ -9,9 +9,34 @@ import {
     Paper,
 } from '@material-ui/core';
 
-export default function StudentSessions({ data }: any) {
-    console.log('eueuueueue', data);
+export interface StudentSessionsProps {
+    data: IStudentSess[] | undefined;
+}
 
+export interface IStudentSess {
+    course: {
+        comment: string | undefined;
+        dateEnd: Date | null;
+        dateStart: Date;
+        status: string | undefined;
+        _id: string;
+        student: {
+            date: Date;
+            email: string;
+            image: string;
+            name: string;
+            role: string;
+            _id: string;
+        };
+    };
+    date: Date;
+    description: string;
+    feedback: string;
+    videolink: string;
+    _id: string;
+}
+
+export default function StudentSessions({ data }: StudentSessionsProps) {
     return (
         <>
             <TableContainer component={Paper}>
@@ -26,7 +51,7 @@ export default function StudentSessions({ data }: any) {
                     </TableHead>
                     <TableBody>
                         {data &&
-                            data.map((row: any) => (
+                            data.map((row) => (
                                 <TableRow key={row._id}>
                                     <TableCell align="right">
                                         {row.description}
@@ -47,8 +72,8 @@ export default function StudentSessions({ data }: any) {
             </TableContainer>
             <hr />
             {data &&
-                data.map((el: any) => (
-                    <div>
+                data.map((el, index) => (
+                    <div key={index}>
                         <h1>{el.description}</h1>
                         <h4>{el.date}</h4>
                         <iframe
