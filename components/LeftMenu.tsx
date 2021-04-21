@@ -19,11 +19,15 @@ import List from '@material-ui/core/List';
 import ListItemText from '@material-ui/core/ListItemText';
 import Link from 'next/link';
 import { PAGES } from '../constants/pages';
-import { Button, ListItem } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
+import { ListItem } from '@material-ui/core';
 import SignInButtons from './auth/sign_in_buttons';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../redux/reducers';
 import { ELoggedIn } from '../types/ELoggedIn';
+import { teal } from '@material-ui/core/colors';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+import SchoolOutlinedIcon from '@material-ui/icons/SchoolOutlined';
+import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
+import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
 
 const drawerWidth = 240;
 
@@ -31,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
+            marginTop: '80px',
         },
         appBar: {
             transition: theme.transitions.create(['margin', 'width'], {
@@ -58,6 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerPaper: {
             width: drawerWidth,
+            background: teal[100],
         },
         drawerHeader: {
             display: 'flex',
@@ -86,25 +92,31 @@ const useStyles = makeStyles((theme: Theme) =>
         title: {
             flexGrow: 1,
         },
+        link: {
+            textDecoration: 'none',
+            color: 'inherit',
+        },
     })
 );
 
-export default function LeftMenu() {
+type TProps = {
+    currentUser: string | undefined;
+    currentEmail: string | undefined;
+    currentId: string | undefined;
+    currentRole: string;
+    isLoggedIn: any;
+};
+
+export default function LeftMenu({
+    currentUser,
+    currentEmail,
+    currentId,
+    currentRole,
+    isLoggedIn,
+}: TProps) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const currentUser = useSelector(
-        (state: IRootState) => state.app.currentUser
-    );
-    const currentEmail = useSelector(
-        (state: IRootState) => state.app.currentEmail
-    );
-    const currentId = useSelector((state: IRootState) => state.app.currentId);
-    const currentRole = useSelector(
-        (state: IRootState) => state.app.currentRole
-    );
-    const isLoggedIn = useSelector((state: IRootState) => state.app.isLoggedIn);
-    console.log({ isLoggedIn });
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -137,9 +149,11 @@ export default function LeftMenu() {
                     >
                         <MenuIcon />
                     </IconButton>
+
                     <Typography variant="h6" className={classes.title} noWrap>
                         THE SEED
                     </Typography>
+
                     {isLoggedIn === ELoggedIn.True && (
                         <div>
                             Signed in as {currentUser} with {currentEmail} your
@@ -153,6 +167,7 @@ export default function LeftMenu() {
                     )}
                 </Toolbar>
             </AppBar>
+
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
@@ -171,62 +186,71 @@ export default function LeftMenu() {
                         )}
                     </IconButton>
                 </div>
+                <Divider />
                 <List>
                     <ListItem button key={PAGES.homepage.path}>
-                        <ListItemText primary={PAGES.homepage.title} />
+                        <HomeOutlinedIcon />
+                        <Link href={PAGES.homepage.path}>
+                            <a className={classes.link}>
+                                <ListItemText primary={PAGES.homepage.title} />
+                            </a>
+                        </Link>
                     </ListItem>
-                    <div className="menuItem">
-                        <Link href={PAGES.profile.path}>
-                            <a>{PAGES.profile.title}</a>
-                        </Link>
-                    </div>
-                    <div className="menuItem">
+                    {currentRole === 'student' && (
+                        <ListItem button key={PAGES.profile.path}>
+                            <SchoolOutlinedIcon />
+                            <Link href={PAGES.profile.path}>
+                                <a className={classes.link}>
+                                    <ListItemText
+                                        primary={PAGES.profile.title}
+                                    />
+                                </a>
+                            </Link>
+                        </ListItem>
+                    )}
+                    <ListItem button key={PAGES.testRedux.path}>
+                        <CropFreeOutlinedIcon />
                         <Link href={PAGES.testRedux.path}>
-                            <a>{PAGES.testRedux.title}</a>
+                            <a className={classes.link}>
+                                <ListItemText primary={PAGES.testRedux.title} />
+                            </a>
                         </Link>
-                    </div>
-                    <div className="menuItem">
+                    </ListItem>
+
+                    <ListItem button key={PAGES.testMongo.path}>
+                        <CropFreeOutlinedIcon />
                         <Link href={PAGES.testMongo.path}>
-                            <a>{PAGES.testMongo.title}</a>
+                            <a className={classes.link}>
+                                <ListItemText primary={PAGES.testMongo.title} />
+                            </a>
                         </Link>
-                    </div>
-                    <div className="menuItem">
-                        <Link href={PAGES.adminpage.path}>
-                            <a>{PAGES.adminpage.title}</a>
-                        </Link>
-                    </div>
-                    <div className="menuItem">
-                        <Link href={PAGES.tutorpage.path}>
-                            <a>{PAGES.tutorpage.title}</a>
-                        </Link>
-                    </div>
+                    </ListItem>
+                    {currentRole === 'admin' && (
+                        <ListItem button key={PAGES.adminpage.path}>
+                            <SupervisorAccountOutlinedIcon />
+                            <Link href={PAGES.adminpage.path}>
+                                <a className={classes.link}>
+                                    <ListItemText
+                                        primary={PAGES.adminpage.title}
+                                    />
+                                </a>
+                            </Link>
+                        </ListItem>
+                    )}
+                    {currentRole !== 'student' && (
+                        <ListItem button key={PAGES.tutorpage.path}>
+                            <SupervisorAccountOutlinedIcon />
+                            <Link href={PAGES.tutorpage.path}>
+                                <a className={classes.link}>
+                                    <ListItemText
+                                        primary={PAGES.tutorpage.title}
+                                    />
+                                </a>
+                            </Link>
+                        </ListItem>
+                    )}
                 </List>
             </Drawer>
-
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: open,
-                })}
-            >
-                <div className={classes.drawerHeader} />
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Rhoncus dolor purus non enim praesent elementum
-                    facilisis leo vel. Risus at ultrices mi tempus imperdiet.
-                    Semper risus in hendrerit gravida rutrum quisque non tellus.
-                    Convallis convallis tellus id interdum velit laoreet id
-                    donec ultrices. Odio morbi quis commodo odio aenean sed
-                    adipiscing. Amet nisl suscipit adipiscing bibendum est
-                    ultricies integer quis. Cursus euismod quis viverra nibh
-                    cras. Metus vulputate eu scelerisque felis imperdiet proin
-                    fermentum leo. Mauris commodo quis imperdiet massa
-                    tincidunt. Cras tincidunt lobortis feugiat vivamus at augue.
-                    At augue eget arcu dictum varius duis at consectetur lorem.
-                    Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                    sapien faucibus et molestie ac.
-                </Typography>
-            </main>
         </div>
     );
 }
