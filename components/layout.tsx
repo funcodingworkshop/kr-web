@@ -26,7 +26,7 @@ export default function Layout({ children, title }: TProps) {
         (state: IRootState) => state.app.currentRole
     );
     const isLoggedIn = useSelector((state: IRootState) => state.app.isLoggedIn);
-    console.log({ isLoggedIn });
+    console.log(currentUser, currentEmail, currentId, currentRole, isLoggedIn);
 
     React.useEffect(() => {
         if (isLoggedIn === ELoggedIn.Unknown) {
@@ -71,19 +71,15 @@ export default function Layout({ children, title }: TProps) {
                 />
             </Head>
             <header>
-                <LeftMenu />
+                <LeftMenu
+                    currentUser={currentUser}
+                    currentEmail={currentEmail}
+                    currentId={currentId}
+                    currentRole={currentRole}
+                    isLoggedIn={isLoggedIn}
+                />
             </header>
             <main>
-                {isLoggedIn === ELoggedIn.True && (
-                    <div>
-                        Signed in as {currentUser} with {currentEmail} your role
-                        is {currentRole}
-                    </div>
-                )}
-                {isLoggedIn !== ELoggedIn.Unknown && (
-                    <SignInButtons isSignedIn={isLoggedIn === ELoggedIn.True} />
-                )}
-
                 <h1>{title}</h1>
                 <div style={{ flexGrow: 1 }}>{children}</div>
             </main>
