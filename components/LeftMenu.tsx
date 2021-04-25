@@ -126,6 +126,7 @@ export default function LeftMenu({
         setOpen(false);
     };
 
+    // TODO: student-admin - constant
     return (
         <div className={classes.root}>
             <CssBaseline />

@@ -35,6 +35,7 @@ export default function Userlist({ res }: UserListProps) {
     const [visible, setVisible] = useState(false);
     const [id, setId] = useState('');
     const [email, setEmail] = useState('');
+    const [userlist, setUserlist] = useState(list);
 
     const [session, loading] = useSession();
 
@@ -55,8 +56,12 @@ export default function Userlist({ res }: UserListProps) {
             </Layout>
         );
     }
+    // TODO: redux0thunk-dispatch
+    const updateUserlist = () => {
+        console.log('udating userlist...');
+    };
 
-    const handleEdit = (id: string, email: string) => {
+    const handleEdit = (id: string, email: string) => () => {
         setVisible(true);
         setId(id);
         setEmail(email);
@@ -65,7 +70,13 @@ export default function Userlist({ res }: UserListProps) {
     return (
         <>
             <Layout title="List of registered users">
-                {visible && <EditForm id={id} email={email} />}
+                {visible && (
+                    <EditForm
+                        id={id}
+                        email={email}
+                        updateUserlist={updateUserlist}
+                    />
+                )}
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -79,8 +90,8 @@ export default function Userlist({ res }: UserListProps) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {list &&
-                                list.map((row) => (
+                            {userlist &&
+                                userlist.map((row) => (
                                     <TableRow key={row._id}>
                                         <TableCell component="th" scope="row">
                                             {row.email}
@@ -96,12 +107,10 @@ export default function Userlist({ res }: UserListProps) {
                                                 color="primary"
                                                 aria-label="upload picture"
                                                 component="span"
-                                                onClick={() =>
-                                                    handleEdit(
-                                                        row._id,
-                                                        row.email
-                                                    )
-                                                }
+                                                onClick={handleEdit(
+                                                    row._id,
+                                                    row.email
+                                                )}
                                             >
                                                 <EditIcon />
                                             </IconButton>
