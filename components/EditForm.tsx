@@ -9,7 +9,8 @@ import {
     InputLabel,
 } from '@material-ui/core';
 
-export const EditForm = ({ id, email }: any) => {
+// TODO: no any
+export const EditForm = ({ id, email, updateUserlist }: any) => {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
@@ -40,6 +41,7 @@ export const EditForm = ({ id, email }: any) => {
             setMessage(`${res.data.email} updated`);
             setName('');
             setRole('');
+            updateUserlist();
             setTimeout(() => {
                 setMessage('');
             }, 3000);
