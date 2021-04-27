@@ -9,14 +9,21 @@ import {
     InputLabel,
 } from '@material-ui/core';
 
-// TODO: no any
-export const EditForm = ({ id, email, updateUserlist }: any) => {
+export interface EditFormProps {
+    id: string;
+    email: string;
+    updateUserList: Function;
+}
+
+export const EditForm = ({ id, email, updateUserList }: EditFormProps) => {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
 
-    const changeHandlerName = (event: any) => {
-        setName(event.target.value);
+    const changeHandlerName = (
+        event: React.ChangeEvent<{ value: unknown }>
+    ) => {
+        setName(event.target.value as string);
     };
 
     const changeHandlerRole = (
@@ -32,16 +39,14 @@ export const EditForm = ({ id, email, updateUserlist }: any) => {
                 role,
                 id,
             };
-            console.log('updateUser!!!', updateUser);
             const res = await axios.put(
                 `${process.env.RESTURL}/api/updateUser`,
                 updateUser
             );
-            console.log(res.data);
+            updateUserList();
             setMessage(`${res.data.email} updated`);
             setName('');
             setRole('');
-            updateUserlist();
             setTimeout(() => {
                 setMessage('');
             }, 3000);

@@ -49,7 +49,6 @@ export default function Layout({ children, title }: TProps) {
                         )
                     );
                 } else {
-                    console.log('NO session!!!', session);
                     dispatch(updateIsLoggedInAC(ELoggedIn.False));
                     dispatch(
                         updateUserAC(undefined, undefined, undefined, undefined)

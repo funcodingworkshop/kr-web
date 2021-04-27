@@ -28,6 +28,7 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import SchoolOutlinedIcon from '@material-ui/icons/SchoolOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
+import { ERole } from '../types/ERole';
 
 const drawerWidth = 240;
 
@@ -126,7 +127,6 @@ export default function LeftMenu({
         setOpen(false);
     };
 
-    // TODO: student-admin - constant
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -197,7 +197,7 @@ export default function LeftMenu({
                             </a>
                         </Link>
                     </ListItem>
-                    {currentRole === 'student' && (
+                    {currentRole !== ERole.Tutor && (
                         <ListItem button key={PAGES.profile.path}>
                             <SchoolOutlinedIcon />
                             <Link href={PAGES.profile.path}>
@@ -226,7 +226,7 @@ export default function LeftMenu({
                             </a>
                         </Link>
                     </ListItem>
-                    {currentRole === 'admin' && (
+                    {currentRole === ERole.Admin && (
                         <ListItem button key={PAGES.adminpage.path}>
                             <SupervisorAccountOutlinedIcon />
                             <Link href={PAGES.adminpage.path}>
@@ -238,7 +238,7 @@ export default function LeftMenu({
                             </Link>
                         </ListItem>
                     )}
-                    {currentRole !== 'student' && (
+                    {currentRole !== ERole.Student && (
                         <ListItem button key={PAGES.tutorpage.path}>
                             <SupervisorAccountOutlinedIcon />
                             <Link href={PAGES.tutorpage.path}>

@@ -21,6 +21,7 @@ import { add_session } from '../redux/actions/addSessionActions';
 
 export interface CourseListProps {
     courses: ITutorData[] | undefined;
+    refreshServerSideProps: Function;
 }
 
 export interface ITutorData {
@@ -39,12 +40,15 @@ export interface ITutorData {
     };
 }
 
-export default function CourseList({ courses }: CourseListProps) {
+export default function CourseList({
+    courses,
+    refreshServerSideProps,
+}: CourseListProps) {
     const dispatch = useDispatch();
 
-    const [visible, setVisible] = useState<boolean>(false);
-    const [id, setId] = useState<string>('');
-    const [name, setName] = useState<string>('');
+    const [visible, setVisible] = useState(false);
+    const [id, setId] = useState('');
+    const [name, setName] = useState('');
 
     const handleEdit = (id: string, name: string) => {
         setVisible(true);
@@ -54,9 +58,10 @@ export default function CourseList({ courses }: CourseListProps) {
 
     const handleDelete = async (id: string) => {
         try {
-            axios.delete(`${process.env.RESTURL}/api/deleteCourse`, {
+            await axios.delete(`${process.env.RESTURL}/api/deleteCourse`, {
                 data: id,
             });
+            refreshServerSideProps();
         } catch (e) {
             console.error(e);
         }
@@ -72,7 +77,13 @@ export default function CourseList({ courses }: CourseListProps) {
 
     return (
         <>
-            {visible && <EditFormCourse id={id} name={name} />}
+            {visible && (
+                <EditFormCourse
+                    id={id}
+                    name={name}
+                    refreshServerSideProps={refreshServerSideProps}
+                />
+            )}
 
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">

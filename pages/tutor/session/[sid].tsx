@@ -42,6 +42,7 @@ export default function ShowSessions({ res }: IShowSessionsProps) {
     );
 
     if (typeof window !== 'undefined' && loading) return null;
+
     if (!session) {
         return (
             <Layout title="Tutor profile">
@@ -57,10 +58,17 @@ export default function ShowSessions({ res }: IShowSessionsProps) {
         );
     }
 
+    const updateSessionsList: Function = () => {
+        router.replace(router.asPath);
+    };
+
     return (
         <Layout title="Sessions list">
             <h1>Session: {name}</h1>
-            <SessionsList course={data} />
+            <SessionsList
+                course={data}
+                updateSessionsList={updateSessionsList}
+            />
         </Layout>
     );
 }

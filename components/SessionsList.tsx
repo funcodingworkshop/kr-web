@@ -16,6 +16,7 @@ import { EditFormSession } from './EditFormSession';
 
 export interface SessionListProps {
     course: ISessionsList[] | undefined;
+    updateSessionsList: Function;
 }
 
 export interface ISessionsList {
@@ -33,20 +34,24 @@ export interface ISessionsList {
     _id: string;
 }
 
-export default function SessionList({ course }: SessionListProps) {
-    const [visible, setVisible] = useState<boolean>(false);
-    const [id, setId] = useState<string>('');
+export default function SessionList({
+    course,
+    updateSessionsList,
+}: SessionListProps) {
+    const [visible, setVisible] = useState(false);
+    const [id, setId] = useState('');
 
     const handleEdit = (id: string) => {
         setId(id);
         setVisible(true);
     };
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async (id: string) => {
         try {
-            axios.delete(`${process.env.RESTURL}/api/deleteSession`, {
+            await axios.delete(`${process.env.RESTURL}/api/deleteSession`, {
                 data: id,
             });
+            updateSessionsList();
         } catch (e) {
             console.error(e);
         }
@@ -54,7 +59,12 @@ export default function SessionList({ course }: SessionListProps) {
 
     return (
         <>
-            {visible && <EditFormSession id={id} />}
+            {visible && (
+                <EditFormSession
+                    id={id}
+                    updateSessionsList={updateSessionsList}
+                />
+            )}
 
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">

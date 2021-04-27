@@ -8,6 +8,7 @@ import { ERole } from '../../types/ERole';
 import { connectDB } from '../../middleware/connectDB';
 import mongoose from 'mongoose';
 import Course from '../../models/course';
+import { useRouter } from 'next/router';
 
 export interface TutorPageProps {
     res: string | undefined;
@@ -33,6 +34,8 @@ export default function TutorPage({ res }: TutorPageProps) {
     const [session, loading] = useSession();
     const data: ITutorData[] = JSON.parse(res);
 
+    const router = useRouter();
+
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
         return (
@@ -49,10 +52,17 @@ export default function TutorPage({ res }: TutorPageProps) {
         );
     }
 
+    const refreshServerSideProps: Function = () => {
+        router.replace(router.asPath);
+    };
+
     return (
         <Layout title="Tutor profile">
             <h1>Courses</h1>
-            <CourseList courses={data} />
+            <CourseList
+                courses={data}
+                refreshServerSideProps={refreshServerSideProps}
+            />
 
             <h1>
                 <Link href="/tutor/addnewcourse">

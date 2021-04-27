@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, TextareaAutosize } from '@material-ui/core';
 
-export const EditFormSession = ({ id }: any) => {
-    const [description, setDescription] = useState<string>('');
-    const [videolink, setVideolink] = useState<string>('');
-    const [feedback, setFeedback] = useState<string>('');
+export interface EditFormSessionProps {
+    id: string;
+    updateSessionsList: Function;
+}
 
-    const [message, setMessage] = useState<string>('');
+export const EditFormSession = ({
+    id,
+    updateSessionsList,
+}: EditFormSessionProps) => {
+    const [description, setDescription] = useState('');
+    const [videolink, setVideolink] = useState('');
+    const [feedback, setFeedback] = useState('');
+
+    const [message, setMessage] = useState('');
 
     const changeHandlerDescription = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -43,6 +51,7 @@ export const EditFormSession = ({ id }: any) => {
 
             console.log(res.data);
             setMessage(`Session data updated`);
+            updateSessionsList();
             setVideolink('');
             setDescription('');
             setFeedback('');

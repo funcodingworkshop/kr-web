@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../redux/reducers';
 
 export const AddNewSessionForm = () => {
-    const [description, setDescription] = useState<string>('');
-    const [feedback, setFeedback] = useState<string>('');
-    const [videolink, setVideolink] = useState<string>('');
-    const [message, setMessage] = useState<string>('');
+    const [description, setDescription] = useState('');
+    const [feedback, setFeedback] = useState('');
+    const [videolink, setVideolink] = useState('');
+    const [message, setMessage] = useState('');
 
     const changeHandlerDescription = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -44,7 +44,6 @@ export const AddNewSessionForm = () => {
                 `${process.env.RESTURL}/api/addnewsession`,
                 addNewSession
             );
-            console.log(res.data);
             setMessage(`${name} session saved`);
             setDescription('');
             setFeedback('');

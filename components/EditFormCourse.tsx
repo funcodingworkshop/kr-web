@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, TextareaAutosize } from '@material-ui/core';
 
-export const EditFormCourse = ({ id, name }: any) => {
-    const [status, setStatus] = useState<string>('');
-    const [comment, setComments] = useState<string>('');
-    const [message, setMessage] = useState<string>('');
+export interface EditFormCourseProps {
+    id: string;
+    name: string;
+    refreshServerSideProps: Function;
+}
+
+export const EditFormCourse = ({
+    id,
+    name,
+    refreshServerSideProps,
+}: EditFormCourseProps) => {
+    const [status, setStatus] = useState('');
+    const [comment, setComments] = useState('');
+    const [message, setMessage] = useState('');
 
     const changeHandlerStatus = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -28,7 +38,7 @@ export const EditFormCourse = ({ id, name }: any) => {
                 `${process.env.RESTURL}/api/updateCourse`,
                 updateCourse
             );
-            console.log(res.data);
+            refreshServerSideProps();
             setMessage(`${name} updated`);
             setComments('');
             setStatus('');

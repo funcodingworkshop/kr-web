@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/client';
 import { TextField, Button } from '@material-ui/core';
@@ -9,6 +9,8 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 import Layout from '../../components/layout';
 import { ERole } from '../../types/ERole';
+import Router from 'next/router';
+import { ChangeEvent } from 'mongodb';
 
 type TProps = {};
 
@@ -50,7 +52,7 @@ export default function AddNewCourse(props: TProps) {
         setSelectedDateEnd(date);
     };
 
-    const createNewCourse = async (event: any) => {
+    const createNewCourse = async (event: FormEvent) => {
         try {
             event.preventDefault();
             const newCourse = {
@@ -58,18 +60,18 @@ export default function AddNewCourse(props: TProps) {
                 selectedDateEnd,
                 ...form,
             };
-            console.log('Submitting form....', newCourse);
             const res = await axios.post(
                 `${process.env.RESTURL}/api/addnewcourse`,
                 newCourse
             );
             console.log(res.data);
+            Router.push('/tutor');
         } catch (e) {
             console.error(e);
         }
     };
 
-    const changeHandler = (event: any) => {
+    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [event.target.name]: event.target.value });
     };
 
