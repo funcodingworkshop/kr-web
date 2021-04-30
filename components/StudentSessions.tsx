@@ -7,6 +7,7 @@ import {
     TableHead,
     TableRow,
     Paper,
+    Button,
 } from '@material-ui/core';
 
 export interface StudentSessionsProps {
@@ -39,7 +40,19 @@ export interface IStudentSess {
 export default function StudentSessions({ data }: StudentSessionsProps) {
     return (
         <>
-            <TableContainer component={Paper}>
+            {data &&
+                data.map((row) => (
+                    <TableRow key={row._id}>
+                        <Button
+                            href="/students/[student_sess]"
+                            color="default"
+                            // as={`/students/${session.databaseId}`}
+                        >
+                            {row.description} || {row.date}
+                        </Button>
+                    </TableRow>
+                ))}
+            {/* <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -86,7 +99,7 @@ export default function StudentSessions({ data }: StudentSessionsProps) {
                             allowFullScreen
                         ></iframe>
                     </div>
-                ))}
+                ))} */}
         </>
     );
 }

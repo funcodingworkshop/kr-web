@@ -64,32 +64,3 @@ export default function Student({ res }: IStudentListProps) {
         </Layout>
     );
 }
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    await connectDB();
-    try {
-        const studentSessions = await SessionCourse.find({}).populate({
-            path: 'course',
-            model: Course,
-            populate: {
-                path: 'student',
-                model: UserInfo,
-                match: { _id: ctx.params.student_sess },
-            },
-        });
-
-        const data = studentSessions.filter((el) => el.course.student);
-
-        if (!data) {
-            return {
-                notFound: true,
-            };
-        }
-        const res = JSON.stringify(data);
-        return {
-            props: { res }, // will be passed to the page component as props
-        };
-    } catch (e) {
-        console.error(e);
-    }
-};

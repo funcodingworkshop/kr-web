@@ -63,7 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerPaper: {
             width: drawerWidth,
-            background: teal[100],
         },
         drawerHeader: {
             display: 'flex',
@@ -179,6 +178,7 @@ export default function LeftMenu({
                 }}
             >
                 <div className={classes.drawerHeader}>
+                    <h3>LOGO</h3>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? (
                             <ChevronLeftIcon />
@@ -187,6 +187,7 @@ export default function LeftMenu({
                         )}
                     </IconButton>
                 </div>
+                <h2>{currentEmail}</h2>
                 <Divider />
                 <List>
                     <ListItem button key={PAGES.homepage.path}>
