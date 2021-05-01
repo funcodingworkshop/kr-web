@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import SessionCourse from '../../models/sessionCourse';
+import KrCoursesSession from '../../models/krCoursesSession';
 import connectDB from '../../middleware/database';
 import { ERole } from '../../types/ERole';
 
@@ -27,49 +27,49 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             if (!description && !videolink && !feedback) {
                 return res.status(400).send({ message: 'Insufficient data' });
             } else if (!description && !videolink) {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { feedback },
                     { new: true }
                 );
                 return res.json(updatedSession);
             } else if (!description && !feedback) {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { videolink },
                     { new: true }
                 );
                 return res.json(updatedSession);
             } else if (!videolink && !feedback) {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { description },
                     { new: true }
                 );
                 return res.json(updatedSession);
             } else if (!description) {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { videolink, feedback },
                     { new: true }
                 );
                 return res.json(updatedSession);
             } else if (!videolink) {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { description, feedback },
                     { new: true }
                 );
                 return res.json(updatedSession);
             } else if (!feedback) {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { description, videolink },
                     { new: true }
                 );
                 return res.json(updatedSession);
             } else {
-                const updatedSession = await SessionCourse.findByIdAndUpdate(
+                const updatedSession = await KrCoursesSession.findByIdAndUpdate(
                     id,
                     { description, videolink, feedback },
                     { new: true }

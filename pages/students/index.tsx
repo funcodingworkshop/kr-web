@@ -26,14 +26,14 @@ export default function Student(props: TProps) {
 
     return (
         <Layout title={`${session.user.name}\'s profile`}>
-            <h1>
+            <h2>
                 <Link
-                    as={`/students/${session.databaseId}`}
-                    href="/students/[student_sess]"
+                    as={`/students/course/${session.databaseId}`}
+                    href="/students/course/[student_course]"
                 >
-                    <a>My sessions</a>
+                    <a>My courses</a>
                 </Link>
-            </h1>
+            </h2>
         </Layout>
     );
 }

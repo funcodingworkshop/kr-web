@@ -10,11 +10,25 @@ import DateFnsUtils from '@date-io/date-fns';
 import Layout from '../../components/layout';
 import { ERole } from '../../types/ERole';
 import Router from 'next/router';
-import { ChangeEvent } from 'mongodb';
+import { createNewMsg } from '../../redux/actions/notificationAction';
+import { useDispatch } from 'react-redux';
+import { GetServerSideProps } from 'next';
+import { connectDB } from '../../middleware/connectDB';
+import KrUser from '../../models/krUser';
+import { MenuItem } from '@material-ui/core';
+import { Select } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
+import { InputLabel } from '@material-ui/core';
 
-type TProps = {};
+export interface AddNewCorseProps {
+    studentNameList: string | undefined;
+}
 
-export default function AddNewCourse(props: TProps) {
+export interface IStudentNameList {
+    name: string;
+}
+
+export default function AddNewCourse({ studentNameList }: AddNewCorseProps) {
     const [session, loading] = useSession();
 
     if (typeof window !== 'undefined' && loading) return null;
@@ -32,18 +46,18 @@ export default function AddNewCourse(props: TProps) {
             </Layout>
         );
     }
+    const dispatch = useDispatch();
+    const nameList: IStudentNameList[] = JSON.parse(studentNameList);
 
-    const [form, setForm] = useState({
-        student: '',
-        status: '',
-        comment: '',
-    });
-
+    const [student, setStudent] = useState('');
     const [selectedDateStart, setSelectedDateStart] = React.useState<Date>(
         new Date()
     );
-
     const [selectedDateEnd, setSelectedDateEnd] = React.useState<Date>(null);
+    const [form, setForm] = useState({
+        status: '',
+        comment: '',
+    });
 
     const handleDateStartChange = (date: Date) => {
         setSelectedDateStart(date);
@@ -58,16 +72,36 @@ export default function AddNewCourse(props: TProps) {
             const newCourse = {
                 selectedDateStart,
                 selectedDateEnd,
+                student,
                 ...form,
             };
             const res = await axios.post(
                 `${process.env.RESTURL}/api/addnewcourse`,
                 newCourse
             );
-            console.log(res.data);
+            if (res.status === 200) {
+                dispatch(
+                    createNewMsg({
+                        message: `New course created`,
+                        msgType: 'success',
+                    })
+                );
+                setTimeout(() => {
+                    dispatch(createNewMsg([]));
+                }, 4000);
+            }
             Router.push('/tutor');
         } catch (e) {
-            console.error(e);
+            dispatch(
+                createNewMsg({
+                    message: e.response.data.message,
+                    msgType: 'error',
+                })
+            );
+            setTimeout(() => {
+                dispatch(createNewMsg([]));
+            }, 4000);
+            console.error(e.response.data);
         }
     };
 
@@ -75,17 +109,37 @@ export default function AddNewCourse(props: TProps) {
         setForm({ ...form, [event.target.name]: event.target.value });
     };
 
+    const changeHandlerStudent = (
+        event: React.ChangeEvent<{ value: unknown }>
+    ) => {
+        setStudent(event.target.value as string);
+    };
+
     return (
         <Layout title="TutorPage">
             <p>Create new course</p>
             <form onSubmit={createNewCourse}>
-                <div>
-                    <TextField
-                        onChange={changeHandler}
-                        name="student"
-                        label="student"
-                    />
+                <div className="formBlock">
+                    <FormControl>
+                        <InputLabel id="select-label">Student</InputLabel>
+                        <Select
+                            labelId="select-label"
+                            value={student}
+                            onChange={changeHandlerStudent}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {nameList &&
+                                nameList.map((el, index) => (
+                                    <MenuItem key={index} value={el.name}>
+                                        {el.name}
+                                    </MenuItem>
+                                ))}
+                        </Select>
+                    </FormControl>
                 </div>
+
                 <div>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
@@ -148,3 +202,31 @@ export default function AddNewCourse(props: TProps) {
         </Layout>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    await connectDB();
+    try {
+        const studentNameList = await KrUser.find({
+            role: ERole.Student,
+        })
+            .select({
+                name: 1,
+                _id: 0,
+            })
+            .sort('-name');
+
+        if (!studentNameList) {
+            return {
+                notFound: true,
+            };
+        }
+
+        return {
+            props: {
+                studentNameList: JSON.stringify(studentNameList),
+            }, // will be passed to the page component as props
+        };
+    } catch (e) {
+        console.error(e);
+    }
+};

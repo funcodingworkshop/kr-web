@@ -8,17 +8,25 @@ import {
     FormControl,
     InputLabel,
 } from '@material-ui/core';
+import { createNewMsg } from '../redux/actions/notificationAction';
+import { useDispatch } from 'react-redux';
 
 export interface EditFormProps {
     id: string;
     email: string;
     updateUserList: Function;
+    changeVisibility: Function;
 }
 
-export const EditForm = ({ id, email, updateUserList }: EditFormProps) => {
+export const EditForm = ({
+    id,
+    email,
+    updateUserList,
+    changeVisibility,
+}: EditFormProps) => {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
-    const [message, setMessage] = useState('');
+    const dispatch = useDispatch();
 
     const changeHandlerName = (
         event: React.ChangeEvent<{ value: unknown }>
@@ -43,18 +51,32 @@ export const EditForm = ({ id, email, updateUserList }: EditFormProps) => {
                 `${process.env.RESTURL}/api/updateUser`,
                 updateUser
             );
-            updateUserList();
-            setMessage(`${res.data.email} updated`);
-            setName('');
-            setRole('');
-            setTimeout(() => {
-                setMessage('');
-            }, 3000);
+
+            if (res.status === 200) {
+                updateUserList();
+                dispatch(
+                    createNewMsg({
+                        message: `${res.data.email} updated`,
+                        msgType: 'success',
+                    })
+                );
+                setName('');
+                setRole('');
+                changeVisibility();
+                setTimeout(() => {
+                    dispatch(createNewMsg([]));
+                }, 4000);
+            }
         } catch (e) {
-            setMessage(`${e}`);
+            dispatch(
+                createNewMsg({
+                    message: `${e}`,
+                    msgType: 'error',
+                })
+            );
             setTimeout(() => {
-                setMessage('');
-            }, 3000);
+                dispatch(createNewMsg([]));
+            }, 4000);
             return;
         }
     };
@@ -64,9 +86,6 @@ export const EditForm = ({ id, email, updateUserList }: EditFormProps) => {
             <div className="editForm">
                 <div>
                     <h3>Edit user: {email}</h3>
-                </div>
-                <div className="message">
-                    <h3>{message}</h3>
                 </div>
 
                 <div className="formBlock">

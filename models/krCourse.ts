@@ -1,7 +1,7 @@
 import mongoose, { Date, Document } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface ICourse extends Document {
+interface IKrCourse extends Document {
     student: any;
     status: string;
     comment: string;
@@ -9,8 +9,8 @@ interface ICourse extends Document {
     dateEnd: Date;
 }
 
-const course = new Schema<ICourse>({
-    student: { type: Schema.Types.ObjectId, ref: 'UserInfo' },
+const krCourse = new Schema<IKrCourse>({
+    student: { type: Schema.Types.ObjectId, ref: 'KrUser' },
     status: String,
     comment: String,
     dateStart: Date,
@@ -21,6 +21,6 @@ const course = new Schema<ICourse>({
 // @ts-ignore
 mongoose.models = {};
 
-const Course = mongoose.model('Course', course);
+const KrCourse = mongoose.model('KrCourse', krCourse);
 
-export default Course;
+export default KrCourse;

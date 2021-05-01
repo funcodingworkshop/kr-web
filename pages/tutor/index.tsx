@@ -6,9 +6,9 @@ import Layout from '../../components/layout';
 import CourseList from '../../components/CourseList';
 import { ERole } from '../../types/ERole';
 import { connectDB } from '../../middleware/connectDB';
-import mongoose from 'mongoose';
-import Course from '../../models/course';
+import KrCourse from '../../models/krCourse';
 import { useRouter } from 'next/router';
+import mongoose from 'mongoose';
 
 export interface TutorPageProps {
     res: string | undefined;
@@ -32,6 +32,7 @@ export interface ITutorData {
 
 export default function TutorPage({ res }: TutorPageProps) {
     const [session, loading] = useSession();
+
     const data: ITutorData[] = JSON.parse(res);
 
     const router = useRouter();
@@ -76,8 +77,8 @@ export default function TutorPage({ res }: TutorPageProps) {
 export const getServerSideProps: GetServerSideProps = async () => {
     await connectDB();
     try {
-        mongoose.model('UserInfo');
-        const data = await Course.find({}).populate('student');
+        mongoose.model('KrUser');
+        const data = await KrCourse.find({}).populate('student');
 
         if (!data) {
             return {
@@ -86,7 +87,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
         }
         const res = JSON.stringify(data);
         return {
-            props: { res }, // will be passed to the page component as props
+            props: {
+                res,
+            }, // will be passed to the page component as props
         };
     } catch (e) {
         console.error(e);

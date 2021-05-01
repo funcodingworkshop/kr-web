@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/client';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import mongoose from 'mongoose';
-import SessionCourse from '../../../models/sessionCourse';
+import KrCoursesSession from '../../../models/krCoursesSession';
 import Layout from '../../../components/layout';
 import SessionsList from '../../../components/SessionsList';
 import { connectDB } from '../../../middleware/connectDB';
@@ -77,8 +77,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     await connectDB();
 
     try {
-        mongoose.model('Course');
-        const data = await SessionCourse.find({
+        mongoose.model('KrCourse');
+        const data = await KrCoursesSession.find({
             course: context.params.sid,
         }).populate('course');
 

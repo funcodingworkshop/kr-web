@@ -7,7 +7,10 @@ import {
     TableHead,
     TableRow,
     Paper,
+    IconButton,
 } from '@material-ui/core';
+import Link from 'next/link';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 export interface StudentSessionsProps {
     data: IStudentSess[] | undefined;
@@ -37,6 +40,10 @@ export interface IStudentSess {
 }
 
 export default function StudentSessions({ data }: StudentSessionsProps) {
+    const handleShowSession = (id: string) => {
+        // dispatch(add_session(id, name));
+        console.log('show sessions', id);
+    };
     return (
         <>
             <TableContainer component={Paper}>
@@ -47,6 +54,7 @@ export default function StudentSessions({ data }: StudentSessionsProps) {
                             <TableCell align="right">Session started</TableCell>
                             <TableCell align="right">Video</TableCell>
                             <TableCell align="right">Feedback</TableCell>
+                            <TableCell align="right">Session detail</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -65,6 +73,23 @@ export default function StudentSessions({ data }: StudentSessionsProps) {
                                     <TableCell align="right">
                                         {row.feedback}
                                     </TableCell>
+                                    <TableCell align="right">
+                                        <Link
+                                            as={`/students/session/${row._id}`}
+                                            href="/students/session/[sess]"
+                                        >
+                                            <IconButton
+                                                color="primary"
+                                                aria-label="show session"
+                                                component="span"
+                                                onClick={() =>
+                                                    handleShowSession(row._id)
+                                                }
+                                            >
+                                                <VisibilityIcon />
+                                            </IconButton>
+                                        </Link>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                     </TableBody>
@@ -79,7 +104,7 @@ export default function StudentSessions({ data }: StudentSessionsProps) {
                         <iframe
                             width="560"
                             height="315"
-                            src={el.videolink}
+                            src={`https://www.youtube.com/embed/${el.videolink}`}
                             title="YouTube video player"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

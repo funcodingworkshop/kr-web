@@ -7,6 +7,7 @@ import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import { ELoggedIn } from '../types/ELoggedIn';
 import { updateIsLoggedInAC, updateUserAC } from '../redux/actions/appActions';
+import { Notification } from './Notification';
 
 type TProps = {
     children: React.ReactNode;
@@ -79,6 +80,7 @@ export default function Layout({ children, title }: TProps) {
                 />
             </header>
             <main>
+                <Notification />
                 <h1>{title}</h1>
                 <div style={{ flexGrow: 1 }}>{children}</div>
             </main>

@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import { EditForm } from '../../components/EditForm';
 import { useSession } from 'next-auth/client';
-import UserInfo from '../../models/userInfo';
+import UserInfo from '../../models/krUser';
 import { GetServerSideProps } from 'next';
 import { connectDB } from '../../middleware/connectDB';
 import { useRouter } from 'next/router';
@@ -70,6 +70,10 @@ export default function Userlist({ res }: UserListProps) {
         setEmail(email);
     };
 
+    const changeVisibility: Function = () => {
+        setVisible(false);
+    };
+
     return (
         <>
             <Layout title="List of registered users">
@@ -78,6 +82,7 @@ export default function Userlist({ res }: UserListProps) {
                         id={id}
                         email={email}
                         updateUserList={updateUserList}
+                        changeVisibility={changeVisibility}
                     />
                 )}
                 <TableContainer component={Paper}>

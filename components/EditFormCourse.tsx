@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, TextareaAutosize } from '@material-ui/core';
+import { createNewMsg } from '../redux/actions/notificationAction';
+import { useDispatch } from 'react-redux';
 
 export interface EditFormCourseProps {
     id: string;
     name: string;
     refreshServerSideProps: Function;
+    setVisibility: Function;
 }
 
 export const EditFormCourse = ({
     id,
     name,
     refreshServerSideProps,
+    setVisibility,
 }: EditFormCourseProps) => {
     const [status, setStatus] = useState('');
     const [comment, setComments] = useState('');
-    const [message, setMessage] = useState('');
+
+    const dispatch = useDispatch();
 
     const changeHandlerStatus = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -38,14 +43,30 @@ export const EditFormCourse = ({
                 `${process.env.RESTURL}/api/updateCourse`,
                 updateCourse
             );
+            dispatch(
+                createNewMsg({
+                    message: `${name} course has been updated`,
+                    msgType: 'success',
+                })
+            );
             refreshServerSideProps();
-            setMessage(`${name} updated`);
             setComments('');
             setStatus('');
             setTimeout(() => {
-                setMessage('');
-            }, 3000);
+                dispatch(createNewMsg([]));
+            }, 4000);
+            setVisibility();
         } catch (e) {
+            dispatch(
+                createNewMsg({
+                    message: e.response.data.message,
+                    msgType: 'error',
+                })
+            );
+            setTimeout(() => {
+                dispatch(createNewMsg([]));
+            }, 4000);
+
             console.error(e);
         }
     };
@@ -56,10 +77,6 @@ export const EditFormCourse = ({
                 <div>
                     <h3>Edit user: {name}</h3>
                 </div>
-                <div className="message">
-                    <h3>{message}</h3>
-                </div>
-
                 <div className="formBlock">
                     <TextField
                         onChange={changeHandlerStatus}

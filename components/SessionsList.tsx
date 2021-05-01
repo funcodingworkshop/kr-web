@@ -57,12 +57,17 @@ export default function SessionList({
         }
     };
 
+    const setVisibility: Function = () => {
+        setVisible(false);
+    };
+
     return (
         <>
             {visible && (
                 <EditFormSession
                     id={id}
                     updateSessionsList={updateSessionsList}
+                    setVisibility={setVisibility}
                 />
             )}
 
@@ -131,7 +136,7 @@ export default function SessionList({
                         <iframe
                             width="560"
                             height="315"
-                            src={el.videolink}
+                            src={`https://www.youtube.com/embed/${el.videolink}`}
                             title="YouTube video player"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

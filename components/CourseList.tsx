@@ -18,6 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { EditFormCourse } from './EditFormCourse';
 import { add_session } from '../redux/actions/addSessionActions';
+import { createNewMsg } from '../redux/actions/notificationAction';
 
 export interface CourseListProps {
     courses: ITutorData[] | undefined;
@@ -61,6 +62,15 @@ export default function CourseList({
             await axios.delete(`${process.env.RESTURL}/api/deleteCourse`, {
                 data: id,
             });
+            dispatch(
+                createNewMsg({
+                    message: `Course has been deleted`,
+                    msgType: 'success',
+                })
+            );
+            setTimeout(() => {
+                dispatch(createNewMsg([]));
+            }, 4000);
             refreshServerSideProps();
         } catch (e) {
             console.error(e);
@@ -75,6 +85,10 @@ export default function CourseList({
         dispatch(add_session(id, name));
     };
 
+    const setVisibility: Function = () => {
+        setVisible(false);
+    };
+
     return (
         <>
             {visible && (
@@ -82,6 +96,7 @@ export default function CourseList({
                     id={id}
                     name={name}
                     refreshServerSideProps={refreshServerSideProps}
+                    setVisibility={setVisibility}
                 />
             )}
 

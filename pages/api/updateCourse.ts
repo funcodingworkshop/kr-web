@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import Course from '../../models/course';
+import KrCourse from '../../models/krCourse';
 import connectDB from '../../middleware/database';
 import { ERole } from '../../types/ERole';
 
@@ -27,21 +27,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             if (!status && !comment) {
                 return res.status(400).send({ message: 'Insufficient data' });
             } else if (!status) {
-                const updatedCourse = await Course.findByIdAndUpdate(
+                const updatedCourse = await KrCourse.findByIdAndUpdate(
                     id,
                     { comment },
                     { new: true }
                 );
                 return res.json(updatedCourse);
             } else if (!comment) {
-                const updatedCourse = await Course.findByIdAndUpdate(
+                const updatedCourse = await KrCourse.findByIdAndUpdate(
                     id,
                     { status },
                     { new: true }
                 );
                 return res.json(updatedCourse);
             } else {
-                const updatedCourse = await Course.findByIdAndUpdate(
+                const updatedCourse = await KrCourse.findByIdAndUpdate(
                     id,
                     { status, comment },
                     { new: true }

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, TextareaAutosize } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '../redux/reducers';
+import { createNewMsg } from '../redux/actions/notificationAction';
+import Router from 'next/router';
 
 export const AddNewSessionForm = () => {
+    const dispatch = useDispatch();
+
     const [description, setDescription] = useState('');
     const [feedback, setFeedback] = useState('');
     const [videolink, setVideolink] = useState('');
-    const [message, setMessage] = useState('');
 
     const changeHandlerDescription = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -44,14 +47,29 @@ export const AddNewSessionForm = () => {
                 `${process.env.RESTURL}/api/addnewsession`,
                 addNewSession
             );
-            setMessage(`${name} session saved`);
+            dispatch(
+                createNewMsg({
+                    message: `${name}'s session added`,
+                    msgType: 'success',
+                })
+            );
             setDescription('');
             setFeedback('');
             setVideolink('');
             setTimeout(() => {
-                setMessage('');
-            }, 3000);
+                dispatch(createNewMsg([]));
+            }, 4000);
+            Router.push(`/tutor/session/${id}`);
         } catch (e) {
+            dispatch(
+                createNewMsg({
+                    message: e.response.data.message,
+                    msgType: 'error',
+                })
+            );
+            setTimeout(() => {
+                dispatch(createNewMsg([]));
+            }, 4000);
             console.error(e);
         }
     };
@@ -61,9 +79,6 @@ export const AddNewSessionForm = () => {
             <div className="editForm">
                 <div>
                     <h3>Session student: {name}</h3>
-                </div>
-                <div className="message">
-                    <h3>{message}</h3>
                 </div>
 
                 <div className="formBlock">
