@@ -8,7 +8,10 @@ import {
     TableRow,
     Paper,
     Button,
+    Link,
 } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { add_session } from '../redux/actions/addSessionActions';
 
 export interface StudentSessionsProps {
     data: IStudentSess[] | undefined;
@@ -38,18 +41,30 @@ export interface IStudentSess {
 }
 
 export default function StudentSessions({ data }: StudentSessionsProps) {
+    const dispatch = useDispatch();
+
+    const handleShowSession = (id: string, name: string) => {
+        dispatch(add_session(id, name));
+    };
+
     return (
         <>
             {data &&
                 data.map((row) => (
                     <TableRow key={row._id}>
-                        <Button
-                            href="/students/[student_sess]"
-                            color="default"
-                            // as={`/students/${session.databaseId}`}
-                        >
-                            {row.description} || {row.date}
-                        </Button>
+                        <Link href={`/students/session/${row._id}`}>
+                            <Button
+                                color="default"
+                                onClick={() =>
+                                    handleShowSession(
+                                        row._id,
+                                        row.course.student.name
+                                    )
+                                }
+                            >
+                                {row.description} || {row.date}
+                            </Button>
+                        </Link>
                     </TableRow>
                 ))}
             {/* <TableContainer component={Paper}>

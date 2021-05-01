@@ -8,6 +8,8 @@ import Course from '../../models/course';
 import UserInfo from '../../models/userInfo';
 import SessionCourse from '../../models/sessionCourse';
 import { connectDB } from '../../middleware/connectDB';
+import mongoose from 'mongoose';
+import Session from '../../components/Session';
 
 export interface IStudentListProps {
     res: string | undefined;
@@ -59,8 +61,32 @@ export default function Student({ res }: IStudentListProps) {
     }
 
     return (
-        <Layout title={`${session.user.name}\'s profile`}>
-            <StudentSessions data={mySessions} />
+        <Layout title={`Session ${session.date}`}>
+            <Session course={mySessions} />
         </Layout>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    await connectDB();
+
+    try {
+        mongoose.model('SessionCourse');
+        const data = await SessionCourse.find({
+            _id: context.params.student_sess,
+        });
+
+        if (!data) {
+            return {
+                notFound: true,
+            };
+        }
+
+        const res = JSON.stringify(data);
+        return {
+            props: { res }, // will be passed to the page component as props
+        };
+    } catch (e) {
+        console.error(e);
+    }
+};
