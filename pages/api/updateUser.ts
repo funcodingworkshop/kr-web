@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import UserInfo from '../../models/userInfo';
+import KrUser from '../../models/krUser';
 import connectDB from '../../middleware/database';
 import { ERole } from '../../types/ERole';
 
@@ -27,21 +27,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             if (!name && !role) {
                 return res.status(400).send({ message: 'Insufficient data' });
             } else if (!name) {
-                const updatetUserInfo = await UserInfo.findByIdAndUpdate(
+                const updatetUserInfo = await KrUser.findByIdAndUpdate(
                     id,
                     { role },
                     { new: true }
                 );
                 return res.json(updatetUserInfo);
             } else if (!role) {
-                const updatetUserInfo = await UserInfo.findByIdAndUpdate(
+                const updatetUserInfo = await KrUser.findByIdAndUpdate(
                     id,
                     { name },
                     { new: true }
                 );
                 return res.json(updatetUserInfo);
             } else {
-                const updatetUserInfo = await UserInfo.findByIdAndUpdate(
+                const updatetUserInfo = await KrUser.findByIdAndUpdate(
                     id,
                     { name, role },
                     { new: true }

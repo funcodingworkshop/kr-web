@@ -5,7 +5,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import UserInfo from '../models/userInfo';
+import KrUser from '../models/krUser';
 import { GetServerSideProps } from 'next';
 import { connectDB } from '../middleware/connectDB';
 import Layout from '../components/layout';
@@ -52,7 +52,7 @@ export default function TestMui({ res }: any) {
 export const getServerSideProps: GetServerSideProps = async () => {
     await connectDB();
     try {
-        const data = await UserInfo.find({});
+        const data = await KrUser.find({});
         if (!data) {
             return {
                 notFound: true,

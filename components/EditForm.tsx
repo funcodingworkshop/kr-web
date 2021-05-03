@@ -8,15 +8,31 @@ import {
     FormControl,
     InputLabel,
 } from '@material-ui/core';
+import { createNewMsg } from '../redux/actions/notificationAction';
+import { useDispatch } from 'react-redux';
 
-// TODO: no any
-export const EditForm = ({ id, email, updateUserlist }: any) => {
+export interface EditFormProps {
+    id: string;
+    email: string;
+    updateUserList: Function;
+    changeVisibility: Function;
+}
+
+export const EditForm = ({
+    id,
+    email,
+    updateUserList,
+    changeVisibility,
+}: EditFormProps) => {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
-    const [message, setMessage] = useState('');
 
-    const changeHandlerName = (event: any) => {
-        setName(event.target.value);
+    const dispatch = useDispatch();
+
+    const changeHandlerName = (
+        event: React.ChangeEvent<{ value: unknown }>
+    ) => {
+        setName(event.target.value as string);
     };
 
     const changeHandlerRole = (
@@ -32,24 +48,36 @@ export const EditForm = ({ id, email, updateUserlist }: any) => {
                 role,
                 id,
             };
-            console.log('updateUser!!!', updateUser);
             const res = await axios.put(
                 `${process.env.RESTURL}/api/updateUser`,
                 updateUser
             );
-            console.log(res.data);
-            setMessage(`${res.data.email} updated`);
-            setName('');
-            setRole('');
-            updateUserlist();
-            setTimeout(() => {
-                setMessage('');
-            }, 3000);
+            if (res.status === 200) {
+                updateUserList();
+                dispatch(
+                    createNewMsg({
+                        message: `${res.data.email} updated`,
+                        msgType: 'success',
+                    })
+                );
+                setName('');
+                setRole('');
+                changeVisibility();
+                setTimeout(() => {
+                    dispatch(createNewMsg([]));
+                }, 4000);
+            }
         } catch (e) {
-            setMessage(`${e}`);
+            dispatch(
+                createNewMsg({
+                    message: `${e}`,
+                    msgType: 'error',
+                })
+            );
+
             setTimeout(() => {
-                setMessage('');
-            }, 3000);
+                dispatch(createNewMsg([]));
+            }, 4000);
             return;
         }
     };
@@ -59,9 +87,6 @@ export const EditForm = ({ id, email, updateUserlist }: any) => {
             <div className="editForm">
                 <div>
                     <h3>Edit user: {email}</h3>
-                </div>
-                <div className="message">
-                    <h3>{message}</h3>
                 </div>
 
                 <div className="formBlock">

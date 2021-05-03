@@ -16,6 +16,7 @@ import { EditFormSession } from './EditFormSession';
 
 export interface SessionListProps {
     course: ISessionsList[] | undefined;
+    updateSessionsList: Function;
 }
 
 export interface ISessionsList {
@@ -33,28 +34,42 @@ export interface ISessionsList {
     _id: string;
 }
 
-export default function SessionList({ course }: SessionListProps) {
-    const [visible, setVisible] = useState<boolean>(false);
-    const [id, setId] = useState<string>('');
+export default function SessionList({
+    course,
+    updateSessionsList,
+}: SessionListProps) {
+    const [visible, setVisible] = useState(false);
+    const [id, setId] = useState('');
 
     const handleEdit = (id: string) => {
         setId(id);
         setVisible(true);
     };
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async (id: string) => {
         try {
-            axios.delete(`${process.env.RESTURL}/api/deleteSession`, {
+            await axios.delete(`${process.env.RESTURL}/api/deleteSession`, {
                 data: id,
             });
+            updateSessionsList();
         } catch (e) {
             console.error(e);
         }
     };
 
+    const setVisibility: Function = () => {
+        setVisible(false);
+    };
+
     return (
         <>
-            {visible && <EditFormSession id={id} />}
+            {visible && (
+                <EditFormSession
+                    id={id}
+                    updateSessionsList={updateSessionsList}
+                    setVisibility={setVisibility}
+                />
+            )}
 
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
@@ -121,7 +136,7 @@ export default function SessionList({ course }: SessionListProps) {
                         <iframe
                             width="560"
                             height="315"
-                            src={el.videolink}
+                            src={`https://www.youtube.com/embed/${el.videolink}`}
                             title="YouTube video player"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

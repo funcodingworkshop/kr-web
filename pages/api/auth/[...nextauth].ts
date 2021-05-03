@@ -2,7 +2,7 @@ import NextAuth, { User } from 'next-auth';
 import Providers from 'next-auth/providers';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TUserSession } from '../../../types/userSession';
-import UserInfo from '../../../models/userInfo';
+import KrUser from '../../../models/krUser';
 import { connectDB } from '../../../middleware/connectDB';
 
 const options = {
@@ -33,19 +33,19 @@ const options = {
         async signIn(user: User, account: any, profile: any) {
             await connectDB();
             try {
-                const candidate = await UserInfo.findOne({
+                const candidate = await KrUser.findOne({
                     email: user.email,
                 });
 
                 if (!candidate) {
-                    const newUserInfo = new UserInfo({
+                    const newKrUser = new KrUser({
                         email: user.email,
                         name: user.name,
                         image: user.image,
                         date: new Date(),
                     });
-                    await newUserInfo.save();
-                    console.log('New user info added');
+                    await newKrUser.save();
+                    console.log('New user added');
                     return;
                 }
 
@@ -71,9 +71,9 @@ const options = {
             if (session) {
                 try {
                     const { email } = session.user;
-                    const userInfo = await UserInfo.findOne({ email });
-                    session.databaseId = userInfo._id;
-                    session.role = userInfo.role;
+                    const krUser = await KrUser.findOne({ email });
+                    session.databaseId = krUser._id;
+                    session.role = krUser.role;
                 } catch (error) {
                     console.error(error);
                 }

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Layout from '../../components/layout';
 import React from 'react';
 import { useSession } from 'next-auth/client';
+import { ERole } from '../../types/ERole';
 
 type TProps = {};
 
@@ -16,7 +17,7 @@ export default function Admin(props: TProps) {
             </Layout>
         );
     }
-    if (session.role !== 'admin') {
+    if (session.role !== ERole.Admin) {
         return (
             <Layout title="Admin profile">
                 <h1>You must be an admin to see this page</h1>;

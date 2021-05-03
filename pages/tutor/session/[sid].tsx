@@ -3,8 +3,7 @@ import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/client';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import mongoose from 'mongoose';
-import SessionCourse from '../../../models/sessionCourse';
+import KrCoursesSession from '../../../models/krCoursesSession';
 import Layout from '../../../components/layout';
 import SessionsList from '../../../components/SessionsList';
 import { connectDB } from '../../../middleware/connectDB';
@@ -57,22 +56,30 @@ export default function ShowSessions({ res }: IShowSessionsProps) {
         );
     }
 
+    const updateSessionsList: Function = () => {
+        router.replace(router.asPath);
+    };
+
     return (
         <Layout title="Sessions list">
             <h1>Session: {name}</h1>
-            <SessionsList course={data} />
+            <SessionsList
+                course={data}
+                updateSessionsList={updateSessionsList}
+            />
         </Layout>
     );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    console.log(111111, context.params.sid);
+
     await connectDB();
 
     try {
-        mongoose.model('Course');
-        const data = await SessionCourse.find({
+        const data = await KrCoursesSession.find({
             course: context.params.sid,
-        }).populate('course');
+        });
 
         if (!data) {
             return {

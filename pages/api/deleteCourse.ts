@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import Course from '../../models/course';
+import KrCourse from '../../models/krCourse';
 import connectDB from '../../middleware/database';
 import { ERole } from '../../types/ERole';
 
@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'DELETE') {
         try {
             const id = req.body;
-            await Course.deleteOne({ _id: id });
+            await KrCourse.deleteOne({ _id: id });
             res.send({
                 message: 'Course has been deleted',
             });

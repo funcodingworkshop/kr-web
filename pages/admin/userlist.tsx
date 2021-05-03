@@ -11,9 +11,11 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import { EditForm } from '../../components/EditForm';
 import { useSession } from 'next-auth/client';
-import UserInfo from '../../models/userInfo';
+import KrUser from '../../models/krUser';
 import { GetServerSideProps } from 'next';
 import { connectDB } from '../../middleware/connectDB';
+import { useRouter } from 'next/router';
+import { ERole } from '../../types/ERole';
 
 export interface UserListProps {
     res: string | undefined;
@@ -30,12 +32,13 @@ export interface IListOfUsers {
 }
 
 export default function Userlist({ res }: UserListProps) {
+    const router = useRouter();
+
     const list: IListOfUsers[] = JSON.parse(res);
 
     const [visible, setVisible] = useState(false);
     const [id, setId] = useState('');
     const [email, setEmail] = useState('');
-    const [userlist, setUserlist] = useState(list);
 
     const [session, loading] = useSession();
 
@@ -49,22 +52,26 @@ export default function Userlist({ res }: UserListProps) {
             </Layout>
         );
     }
-    if (session.role !== 'admin') {
+    if (session.role !== ERole.Admin) {
         return (
             <Layout title="List of registered users">
                 <div>You must be an admin to see this page</div>;
             </Layout>
         );
     }
-    // TODO: redux0thunk-dispatch
-    const updateUserlist = () => {
-        console.log('udating userlist...');
+
+    const updateUserList: Function = () => {
+        router.replace(router.asPath);
     };
 
     const handleEdit = (id: string, email: string) => () => {
         setVisible(true);
         setId(id);
         setEmail(email);
+    };
+
+    const changeVisibility: Function = () => {
+        setVisible(false);
     };
 
     return (
@@ -74,7 +81,8 @@ export default function Userlist({ res }: UserListProps) {
                     <EditForm
                         id={id}
                         email={email}
-                        updateUserlist={updateUserlist}
+                        updateUserList={updateUserList}
+                        changeVisibility={changeVisibility}
                     />
                 )}
                 <TableContainer component={Paper}>
@@ -90,8 +98,8 @@ export default function Userlist({ res }: UserListProps) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {userlist &&
-                                userlist.map((row) => (
+                            {list &&
+                                list.map((row) => (
                                     <TableRow key={row._id}>
                                         <TableCell component="th" scope="row">
                                             {row.email}
@@ -128,7 +136,7 @@ export default function Userlist({ res }: UserListProps) {
 export const getServerSideProps: GetServerSideProps = async () => {
     await connectDB();
     try {
-        const data = await UserInfo.find({});
+        const data = await KrUser.find({});
         if (!data) {
             return {
                 notFound: true,

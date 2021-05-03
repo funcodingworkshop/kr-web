@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
-import Course from '../../models/course';
+import KrCourse from '../../models/krCourse';
 import connectDB from '../../middleware/database';
-import SessionCourse from '../../models/sessionCourse';
+import KrCoursesSession from '../../models/krCoursesSession';
 import { ERole } from '../../types/ERole';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -26,8 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             const { description, videolink, feedback, id } = req.body;
 
-            const addNewSession = await SessionCourse.create({
-                course: await Course.findOne({ _id: String(id) }),
+            const addNewSession = await KrCoursesSession.create({
+                course: await KrCourse.findOne({ _id: String(id) }),
                 date: new Date(),
                 description,
                 videolink,
