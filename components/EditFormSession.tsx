@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, TextareaAutosize } from '@material-ui/core';
+import { createNewMsg } from '../redux/actions/notificationAction';
+import { useDispatch } from 'react-redux';
+import { EditFormCourseProps } from './EditFormCourse';
 
-export const EditFormSession = ({ id }: any) => {
-    const [description, setDescription] = useState<string>('');
-    const [videolink, setVideolink] = useState<string>('');
-    const [feedback, setFeedback] = useState<string>('');
+export interface EditFormSessionProps {
+    id: string;
+    updateSessionsList: Function;
+    setVisibility: Function;
+}
 
-    const [message, setMessage] = useState<string>('');
+export const EditFormSession = ({
+    id,
+    updateSessionsList,
+    setVisibility,
+}: EditFormSessionProps) => {
+    const [description, setDescription] = useState('');
+    const [videolink, setVideolink] = useState('');
+    const [feedback, setFeedback] = useState('');
+
+    const dispatch = useDispatch();
 
     const changeHandlerDescription = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -40,16 +53,30 @@ export const EditFormSession = ({ id }: any) => {
                 `${process.env.RESTURL}/api/updateSession`,
                 updateSession
             );
-
-            console.log(res.data);
-            setMessage(`Session data updated`);
+            dispatch(
+                createNewMsg({
+                    message: `Session data has been updated`,
+                    msgType: 'success',
+                })
+            );
+            updateSessionsList();
             setVideolink('');
             setDescription('');
             setFeedback('');
+            setVisibility();
             setTimeout(() => {
-                setMessage('');
-            }, 3000);
+                dispatch(createNewMsg([]));
+            }, 4000);
         } catch (e) {
+            dispatch(
+                createNewMsg({
+                    message: e.response.data.message,
+                    msgType: 'error',
+                })
+            );
+            setTimeout(() => {
+                dispatch(createNewMsg([]));
+            }, 4000);
             console.error(e);
         }
     };
@@ -57,10 +84,6 @@ export const EditFormSession = ({ id }: any) => {
     return (
         <React.Fragment>
             <div className="editForm">
-                <div className="message">
-                    <h3>{message}</h3>
-                </div>
-
                 <div className="formBlock">
                     <TextField
                         onChange={changeHandlerDescription}

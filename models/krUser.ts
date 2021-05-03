@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 const Schema = mongoose.Schema;
 
-interface IUserInfo extends Document {
+interface IKrUser extends Document {
     email: string;
     role: string;
     name: string;
@@ -9,7 +9,7 @@ interface IUserInfo extends Document {
     date: Date;
 }
 
-const userInfo = new Schema<IUserInfo>({
+const krUser = new Schema<IKrUser>({
     email: { type: String, required: true, unique: true },
     role: {
         type: String,
@@ -18,12 +18,18 @@ const userInfo = new Schema<IUserInfo>({
     name: String,
     image: String,
     date: Date,
+    courses: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'KrCourse',
+        },
+    ],
 });
 
 // to avoid overwrite errror???
 // @ts-ignore
 mongoose.models = {};
 
-const UserInfo = mongoose.model('UserInfo', userInfo);
+const KrUser = mongoose.model('KrUser', krUser);
 
-export default UserInfo;
+export default KrUser;
