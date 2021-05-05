@@ -22,11 +22,11 @@ export default function Layout({ children, title }: TProps) {
         (state: IRootState) => state.app.currentEmail
     );
     const currentId = useSelector((state: IRootState) => state.app.currentId);
+
     const currentRole = useSelector(
         (state: IRootState) => state.app.currentRole
     );
     const isLoggedIn = useSelector((state: IRootState) => state.app.isLoggedIn);
-    console.log(currentUser, currentEmail, currentId, currentRole, isLoggedIn);
 
     React.useEffect(() => {
         if (isLoggedIn === ELoggedIn.Unknown) {
@@ -44,8 +44,8 @@ export default function Layout({ children, title }: TProps) {
                         updateUserAC(
                             session.user.name,
                             session.user.email,
-                            session.databaseId,
-                            session.role
+                            session.databaseId as string,
+                            session.role as string
                         )
                     );
                 } else {

@@ -7,6 +7,7 @@ interface IKrUser extends Document {
     name: string;
     image: string;
     date: Date;
+    courses: string[];
 }
 
 const krUser = new Schema<IKrUser>({
@@ -30,6 +31,6 @@ const krUser = new Schema<IKrUser>({
 // @ts-ignore
 mongoose.models = {};
 
-const KrUser = mongoose.model('KrUser', krUser);
+const KrUser = mongoose.model<IKrUser>('KrUser', krUser);
 
 export default KrUser;
