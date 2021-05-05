@@ -8,8 +8,6 @@ type TProps = {};
 export default function Student(props: TProps) {
     const [session, loading] = useSession();
 
-    console.log('!!!!', session);
-
     if (typeof window !== 'undefined' && loading) return null;
     if (!session) {
         return (

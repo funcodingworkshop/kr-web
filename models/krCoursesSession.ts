@@ -21,6 +21,9 @@ const krCoursesSession = new Schema<IKrCoursesSession>({
 // @ts-ignore
 mongoose.models = {};
 
-const KrCoursesSession = mongoose.model('KrCoursesSessions', krCoursesSession);
+const KrCoursesSession = mongoose.model<IKrCoursesSession>(
+    'KrCoursesSessions',
+    krCoursesSession
+);
 
 export default KrCoursesSession;

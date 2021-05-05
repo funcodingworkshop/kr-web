@@ -72,6 +72,7 @@ const options = {
                 try {
                     const { email } = session.user;
                     const krUser = await KrUser.findOne({ email });
+
                     session.databaseId = krUser._id;
                     session.role = krUser.role;
                 } catch (error) {
