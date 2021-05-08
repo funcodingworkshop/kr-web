@@ -200,7 +200,10 @@ export default function LeftMenu({
                     {currentRole !== ERole.Tutor && (
                         <ListItem button key={PAGES.profile.path}>
                             <SchoolOutlinedIcon />
-                            <Link href={PAGES.profile.path}>
+                            <Link
+                                as={`/students/course/${currentId}`}
+                                href={PAGES.profile.path}
+                            >
                                 <a className={classes.link}>
                                     <ListItemText
                                         primary={PAGES.profile.title}
