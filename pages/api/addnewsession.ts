@@ -34,6 +34,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 feedback,
             });
 
+            const course = await KrCourse.findOne({ _id: String(id) });
+
+            console.log('ADDING SESSION', addNewSession);
+
+            course.courseSessions = course.courseSessions.concat(
+                addNewSession._id
+            );
+            await course.save();
+
             return res.json(addNewSession);
         } catch (error) {
             return res.status(500).send(error.message);
