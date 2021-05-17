@@ -1,5 +1,4 @@
 import { useSession } from 'next-auth/client';
-import Link from 'next/link';
 import Layout from '../../components/layout';
 import { ERole } from '../../types/ERole';
 import KrCourse from '../../models/krCourse';

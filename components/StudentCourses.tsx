@@ -1,6 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import StudentSessions from '../components/StudentSessions';
 import KrCoursesSession from '../models/krCoursesSession';
 import {
@@ -42,8 +40,8 @@ export default function StudentCourses({ data }: any) {
                                 <TableRow key={row._id}>
                                     <TableCell align="right">
                                         {row.dateStart}
-                                    </TableCell>{' '}
-                                                      
+                                    </TableCell>
+
                                     {/*<TableCell align="right">
                                         {row.comment}
                                     </TableCell>
@@ -64,6 +62,7 @@ export default function StudentCourses({ data }: any) {
                                             </IconButton>
                                         </Link>
                                     </TableCell> */}
+
                                     <TableCell align="right">
                                         <StudentSessions
                                             data={data}

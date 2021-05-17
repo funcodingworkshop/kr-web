@@ -6,7 +6,6 @@ import StudentCourses from '../../../components/StudentCourses';
 import KrCourse from '../../../models/krCourse';
 import { connectDB } from '../../../middleware/connectDB';
 import mongoose from 'mongoose';
-import KrCoursesSession from '../../../models/krCoursesSession';
 
 export default function StudentCourse({ res }: any) {
     const [session, loading] = useSession();
@@ -41,6 +40,7 @@ export default function StudentCourse({ res }: any) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     await connectDB();
     try {
+        mongoose.model('KrCoursesSessions');
         const courses = await KrCourse.find({
             student: ctx.query.student_course,
         }).populate('courseSessions');
