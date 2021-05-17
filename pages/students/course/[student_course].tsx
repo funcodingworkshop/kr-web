@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     try {
         const courses = await KrCourse.find({
             student: ctx.query.student_course,
-        }).populate('courseSessions');
+        });
 
         console.log(11111, courses);
 
