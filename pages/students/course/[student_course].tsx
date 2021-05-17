@@ -5,8 +5,7 @@ import { ERole } from '../../../types/ERole';
 import StudentCourses from '../../../components/StudentCourses';
 import KrCourse from '../../../models/krCourse';
 import { connectDB } from '../../../middleware/connectDB';
-import KrCoursesSession from '../../../models/krCoursesSession';
-import { Db } from 'mongodb';
+import mongoose from 'mongoose';
 
 export default function StudentCourse({ res }: any) {
     const [session, loading] = useSession();
@@ -42,41 +41,20 @@ export default function StudentCourse({ res }: any) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     await connectDB();
     try {
-        const coursesResult = [];
-
+        mongoose.model('KrCoursesSessions');
         const courses = await KrCourse.find({
             student: ctx.query.student_course,
-        });
+        }).populate('courseSessions');
+        const res = JSON.stringify(courses);
+
         console.log(11111, courses);
 
-        db.KrCourse.aggregate([
-            {
-                $lookup: {
-                    from: 'KrCoursesSession',
-                    localField: '_id',
-                    foreignField: 'course._id',
-                    as: 'krsessions',
-                },
-            },
-        ]);
-
-        // for (let i = 0; i < courses.length; i++) {
-        //     const curentCourse: any = courses[i];
-        //     const sessions = await KrCoursesSession.find({
-        //         course: curentCourse._id,
-        //     });
-        //     console.log(22222, sessions);
-        //     curentCourse['sessions'] = sessions;
-        //     console.log(44444, curentCourse);
-        //     coursesResult.push(curentCourse);
-        // }
-
-        if (!courses) {
+        if (!res) {
             return {
                 notFound: true,
             };
         }
-        const res = JSON.stringify(courses);
+
         return {
             props: { res }, // will be passed to the page component as props
         };
