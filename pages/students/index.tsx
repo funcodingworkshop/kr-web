@@ -16,35 +16,30 @@ export default function Student({ res }: any) {
     if (!session) {
         return (
             <Layout title="Student profile">
-                                <h1>You must sign in</h1>;             
+                <h1>You must sign in</h1>;
             </Layout>
         );
     }
     if (session.role !== ERole.Student) {
         return (
             <Layout title="Student profile">
-                                <h1>You must be a student to see this page</h1>;
-                            
+                <h1>You must be a student to see this page</h1>;
             </Layout>
         );
     }
     const name = session.user.name ? session.user.name : session.user.email;
     return (
         <Layout title={`${name}\'s profile`}>
-                        
             <h2>
-                                
                 {/* <Link
                     as={`/students/course/${session.databaseId}`}
                     href="/students/course/[student_course]"
                 >
                     <a>My courses</a>
                 </Link> */}
-                                
+
                 <StudentCourses data={myCourses} />
-                            
             </h2>
-                    
         </Layout>
     );
 }

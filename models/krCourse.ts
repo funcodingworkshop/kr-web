@@ -15,6 +15,7 @@ const krCourse = new Schema<IKrCourse>({
     comment: String,
     dateStart: Date,
     dateEnd: Date,
+    krsessions: [{ type: Schema.Types.ObjectId, ref: 'KrCoursesSessions' }],
 });
 
 // to avoid overwrite errror???

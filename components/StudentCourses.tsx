@@ -24,38 +24,26 @@ export default function StudentCourses({ data }: any) {
         <>
             <TableContainer component={Paper}>
                 {' '}
-                                
                 <Table aria-label="simple table">
                     {' '}
-                                        
                     <TableHead>
                         {' '}
-                                                
                         <TableRow>
                             {' '}
-                                                        
                             <TableCell align="right">Course started</TableCell>
-                                                        
                             {/* <TableCell align="right">Status</TableCell>
                             <TableCell align="right">Comments</TableCell>
                             <TableCell align="right">Show sessions</TableCell> */}
-                                                    
                         </TableRow>
-                                            
                     </TableHead>
-                                        
                     <TableBody>
-                                                
                         {data &&
                             data.map((row: any) => (
                                 <TableRow key={row._id}>
-                                                                        
                                     <TableCell align="right">
-                                                                                
                                         {row.dateStart}
-                                                                            
                                     </TableCell>
-                                                                        
+
                                     {/* <TableCell align="right">
                                         {row.status}
                                     </TableCell>
@@ -79,24 +67,17 @@ export default function StudentCourses({ data }: any) {
                                             </IconButton>
                                         </Link>
                                     </TableCell> */}
-                                                                        
+
                                     <TableCell align="right">
-                                                                                
                                         <StudentSessions
                                             data={data}
                                         ></StudentSessions>
-                                                                            
                                     </TableCell>
-                                                                    
                                 </TableRow>
                             ))}
-                                            
                     </TableBody>
-                                    
                 </Table>
-                            
             </TableContainer>
-                    
         </>
     );
 }
