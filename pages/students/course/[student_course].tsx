@@ -33,7 +33,6 @@ export default function StudentCourse({ res }: any) {
 
     return (
         <Layout title={`${name}\'s profile`}>
-            <h1> My courses</h1>
             <StudentCourses data={myCourses} />
         </Layout>
     );
@@ -44,20 +43,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     try {
         const courses = await KrCourse.find({
             student: ctx.query.student_course,
-        });
+        }).populate('courseSessions');
+        const res = JSON.stringify(courses);
 
         console.log(11111, courses);
 
-        if (!courses) {
+        if (!res) {
             return {
                 notFound: true,
             };
         }
 
-        const res = JSON.stringify(courses);
-
         return {
-            props: { res }, // will be passed to the page component as props
+            props: { res: res }, // will be passed to the page component as props
         };
     } catch (e) {
         console.error(e);

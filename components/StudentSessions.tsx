@@ -12,34 +12,36 @@ import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { IconButton } from '@material-ui/core';
-export interface StudentSessionsProps {
-    data: IStudentSess[] | undefined;
-}
-export interface IStudentSess {
-    course: {
-        comment: string | undefined;
-        dateEnd: Date | null;
-        dateStart: Date;
-        status: string | undefined;
-        _id: string;
-        student: {
-            date: Date;
-            email: string;
-            image: string;
-            name: string;
-            role: string;
-            _id: string;
-        };
-    };
-    date: Date;
-    description: string;
-    feedback: string;
-    videolink: string;
-    _id: string;
-}
 
-export default function StudentSessions({ data }: StudentSessionsProps) {
+// export interface StudentSessionsProps {
+//     data: IStudentSess[] | undefined;
+// }
+// export interface IStudentSess {
+//     course: {
+//         comment: string | undefined;
+//         dateEnd: Date | null;
+//         dateStart: Date;
+//         status: string | undefined;
+//         _id: string;
+//         student: {
+//             date: Date;
+//             email: string;
+//             image: string;
+//             name: string;
+//             role: string;
+//             _id: string;
+//         };
+//     };
+//     date: Date;
+//     description: string;
+//     feedback: string;
+//     videolink: string;
+//     _id: string;
+// }
+
+export default function StudentSessions({ data }: any) {
     const dispatch = useDispatch();
+
     const handleShowSession = (id: string) => {
         // dispatch(add_session(id, name));
         console.log('show sessions', id);
@@ -62,26 +64,21 @@ export default function StudentSessions({ data }: StudentSessionsProps) {
 
                     <TableBody>
                         {data &&
-                            data.map((row) => (
+                            data.map((row: any) => (
                                 <TableRow key={row._id}>
-                                    {/* <TableCell align="right">
-                                        {row.description}
-                                    </TableCell> */}
-
+                                     
                                     <TableCell align="right">
-                                        {row.date}
+                                                                                
+                                        {row.courseSessions.date}
+                                                                            
                                     </TableCell>
-
-                                    {/* <TableCell align="right">
-                                        {row.videolink}
-                                    </TableCell>
-                                    <TableCell align="right">
+                                                                        
+                                    {/*<TableCell align="right">
                                         {row.feedback}
                                     </TableCell> */}
-
                                     <TableCell align="right">
                                         <Link
-                                            as={`/students/session/${row._id}`}
+                                            as={`/students/session/${row.courseSessions._id}`}
                                             href="/students/session/[sess]"
                                         >
                                             <IconButton

@@ -16,10 +16,10 @@ import {
 
 export default function StudentCourses({ data }: any) {
     console.log('!!!2222', data);
-    const handleShowSession = (id: string) => {
-        // dispatch(add_session(id, name));
-        console.log('show sessions', id);
-    };
+    // const handleShowSession = (id: string) => {
+    //     // dispatch(add_session(id, name));
+    //     console.log('show sessions', id);
+    // };
     return (
         <>
             <TableContainer component={Paper}>
@@ -42,12 +42,9 @@ export default function StudentCourses({ data }: any) {
                                 <TableRow key={row._id}>
                                     <TableCell align="right">
                                         {row.dateStart}
-                                    </TableCell>
-
-                                    {/* <TableCell align="right">
-                                        {row.status}
-                                    </TableCell>
-                                    <TableCell align="right">
+                                    </TableCell>{' '}
+                                                      
+                                    {/*<TableCell align="right">
                                         {row.comment}
                                     </TableCell>
                                     <TableCell align="right">
@@ -67,7 +64,6 @@ export default function StudentCourses({ data }: any) {
                                             </IconButton>
                                         </Link>
                                     </TableCell> */}
-
                                     <TableCell align="right">
                                         <StudentSessions
                                             data={data}
