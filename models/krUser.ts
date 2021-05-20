@@ -19,12 +19,6 @@ const krUser = new Schema<IKrUser>({
     name: String,
     image: String,
     date: Date,
-    courses: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'KrCourse',
-        },
-    ],
 });
 
 // to avoid overwrite errror???

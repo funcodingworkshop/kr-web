@@ -1,6 +1,6 @@
 import React from 'react';
 import StudentSessions from '../components/StudentSessions';
-import KrCoursesSession from '../models/krCoursesSession';
+
 import {
     Table,
     TableBody,
@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 
 export default function StudentCourses({ data }: any) {
-    console.log('!!!2222', data);
+    console.log('!!!2222', data.courses);
     // const handleShowSession = (id: string) => {
     //     // dispatch(add_session(id, name));
     //     console.log('show sessions', id);
@@ -35,8 +35,8 @@ export default function StudentCourses({ data }: any) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data &&
-                            data.map((row: any) => (
+                        {data.courses &&
+                            data.courses.map((row: any) => (
                                 <TableRow key={row._id}>
                                     <TableCell align="right">
                                         {row.dateStart}
@@ -65,7 +65,7 @@ export default function StudentCourses({ data }: any) {
 
                                     <TableCell align="right">
                                         <StudentSessions
-                                            data={data}
+                                            data={data.courses}
                                         ></StudentSessions>
                                     </TableCell>
                                 </TableRow>

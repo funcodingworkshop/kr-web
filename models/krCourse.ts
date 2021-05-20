@@ -7,16 +7,14 @@ interface IKrCourse extends Document {
     comment: string;
     dateStart: Date;
     dateEnd: Date;
-    courseSessions: any;
 }
 
 const krCourse = new Schema<IKrCourse>({
-    student: { type: Schema.Types.ObjectId, ref: 'KrUser' },
+    student: { type: Schema.Types.ObjectId, ref: 'KrUser', required: true },
     status: String,
     comment: String,
     dateStart: Date,
     dateEnd: Date,
-    courseSessions: [{ type: Schema.Types.ObjectId, ref: 'KrCoursesSessions' }],
 });
 
 // to avoid overwrite errror???

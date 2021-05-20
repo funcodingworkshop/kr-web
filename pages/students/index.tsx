@@ -5,6 +5,8 @@ import KrCourse from '../../models/krCourse';
 import { connectDB } from '../../middleware/connectDB';
 import { GetServerSideProps } from 'next';
 import StudentCourses from '../../components/StudentCourses';
+import { getSession } from 'next-auth/client';
+import mongoose from 'mongoose';
 
 export default function Student({ res }: any) {
     const myCourses = JSON.parse(res);
@@ -35,19 +37,28 @@ export default function Student({ res }: any) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     await connectDB();
-    try {
-        const data = await KrCourse.find({ student: ctx.query });
+    // mongoose.model('KrCoursesSessions', KrCoursesSession);
 
-        if (!data) {
-            return {
-                notFound: true,
-            };
-        }
-        const res = JSON.stringify(data);
+    // try {
+    const session = await getSession({ req: ctx.req });
+    const userId = session.databaseId;
+    console.log(555555, userId);
+
+    const data = await KrCourse.find({
+        student: session.databaseId,
+    }).populate('courseSessions');
+
+    console.log(66666, data);
+    if (!data) {
         return {
-            props: { res }, // will be passed to the page component as props
+            notFound: true,
         };
-    } catch (e) {
-        console.error(e);
     }
+    // const res = JSON.stringify(data);
+    // return {
+    //     props: { res }, // will be passed to the page component as props
+    // };
+    // } catch (e) {
+    //     console.error(e);
+    // }
 };

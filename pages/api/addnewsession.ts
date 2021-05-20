@@ -33,14 +33,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 videolink,
                 feedback,
             });
-            const course = await KrCourse.findOne({ _id: String(id) });
-
-            console.log('ADDING SESSION', addNewSession);
-
-            course.courseSessions = course.courseSessions.concat(
-                addNewSession._id
-            );
-            await course.save();
 
             return res.json(addNewSession);
         } catch (error) {

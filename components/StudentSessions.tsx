@@ -41,6 +41,8 @@ import { IconButton } from '@material-ui/core';
 
 export default function StudentSessions({ data }: any) {
     const dispatch = useDispatch();
+    const sessions = data.sessions;
+    console.log('0000', data.dateStart);
 
     const handleShowSession = (id: string) => {
         // dispatch(add_session(id, name));
@@ -66,19 +68,17 @@ export default function StudentSessions({ data }: any) {
                         {data &&
                             data.map((row: any) => (
                                 <TableRow key={row._id}>
-                                     
                                     <TableCell align="right">
-                                                                                
-                                        {row.courseSessions.date}
-                                                                            
+                                        {row.date}{' '}
+                                                                          
                                     </TableCell>
-                                                                        
+                                                                 
                                     {/*<TableCell align="right">
                                         {row.feedback}
                                     </TableCell> */}
                                     <TableCell align="right">
                                         <Link
-                                            as={`/students/session/${row.courseSessions._id}`}
+                                            as={`/students/session/${row._id}`}
                                             href="/students/session/[sess]"
                                         >
                                             <IconButton
@@ -98,8 +98,6 @@ export default function StudentSessions({ data }: any) {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-            <hr />
         </>
     );
 }

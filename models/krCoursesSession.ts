@@ -10,7 +10,7 @@ interface IKrCoursesSession extends Document {
 }
 
 const krCoursesSession = new Schema<IKrCoursesSession>({
-    course: { type: Schema.Types.ObjectId, ref: 'krCourse' },
+    course: { type: Schema.Types.ObjectId, ref: 'krCourse', required: true },
     date: Date,
     description: String,
     videolink: String,
