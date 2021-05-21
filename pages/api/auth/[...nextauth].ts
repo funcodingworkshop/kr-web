@@ -6,6 +6,9 @@ import KrUser from '../../../models/krUser';
 import { connectDB } from '../../../middleware/connectDB';
 
 const options = {
+    pages: {
+        signIn: '/signin',
+    },
     providers: [
         Providers.Google({
             clientId: process.env.GOOGLE_ID,
