@@ -11,11 +11,11 @@ const connectDB = (handler: any) => async (
         return handler(req, res);
     }
     // Use new db connection
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URI_AWS, {
         useNewUrlParser: true,
         ssl: true,
         sslValidate: true,
-        sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
+        sslCA: fs.readFileSync('../rds-combined-ca-bundle.pem'),
     });
     return handler(req, res);
 };

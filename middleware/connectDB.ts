@@ -6,11 +6,11 @@ console.log('MONGO_URI!!!!', process.env.MONGODB_URI);
 export const connectDB = async () => {
     if (!mongoose.connections[0]?.readyState) {
         mongoose
-            .connect(process.env.MONGODB_URI, {
+            .connect(process.env.MONGODB_URI_AWS, {
                 useNewUrlParser: true,
                 ssl: true,
                 sslValidate: true,
-                sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
+                sslCA: fs.readFileSync('../rds-combined-ca-bundle.pem'),
             })
             .then(() => console.log('Connection to DB successful'))
             .catch((err) => console.error(err, 'Error'));
