@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
+const fs = require('fs');
 
 const connectDB = (handler: any) => async (
     req: NextApiRequest,
@@ -11,10 +12,10 @@ const connectDB = (handler: any) => async (
     }
     // Use new db connection
     await mongoose.connect(process.env.MONGODB_URI, {
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-        useCreateIndex: true,
         useNewUrlParser: true,
+        ssl: true,
+        sslValidate: true,
+        sslCA: fs.readFileSync('./rds-combined-ca-bundle.pem'),
     });
     return handler(req, res);
 };
