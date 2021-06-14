@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 const fs = require('fs');
+const path = require('path');
 
 const connectDB = (handler: any) => async (
     req: NextApiRequest,
@@ -15,7 +16,9 @@ const connectDB = (handler: any) => async (
         useNewUrlParser: true,
         ssl: true,
         sslValidate: true,
-        sslCA: fs.readFileSync('../rds-combined-ca-bundle.pem'),
+        sslCA: fs.readFileSync(
+            path.join(process.cwd(), 'rds-combined-ca-bundle.pem')
+        ),
     });
     return handler(req, res);
 };
