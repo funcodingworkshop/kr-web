@@ -11,16 +11,26 @@ const connectDB = (handler: any) => async (
         // Use current db connection
         return handler(req, res);
     }
-    // Use new db connection
-    await mongoose.connect(process.env.MONGODB_URI_AWS, {
-        useNewUrlParser: true,
-        ssl: true,
-        sslValidate: true,
-        sslCA: fs.readFileSync(
-            path.join(process.cwd(), 'rds-combined-ca-bundle.pem')
-        ),
-    });
-    return handler(req, res);
+
+    if (process.env.DB === 'AWS') {
+        await mongoose.connect(process.env.MONGODB_URI_AWS, {
+            useNewUrlParser: true,
+            ssl: true,
+            sslValidate: true,
+            sslCA: fs.readFileSync(
+                path.join(process.cwd(), 'rds-combined-ca-bundle.pem')
+            ),
+        });
+        return handler(req, res);
+    } else {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+            useCreateIndex: true,
+            useNewUrlParser: true,
+        });
+        return handler(req, res);
+    }
 };
 
 export default connectDB;
