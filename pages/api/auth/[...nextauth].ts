@@ -30,10 +30,7 @@ const options = {
             from: process.env.EMAIL_FROM,
         }),
     ],
-    database:
-        process.env.DB === 'AWS'
-            ? process.env.MONGODB_URI_AWS
-            : process.env.MONGODB_URI,
+    database: process.env.MONGODB_URI,
 
     callbacks: {
         async signIn(user: User, account: any, profile: any) {
