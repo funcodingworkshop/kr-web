@@ -28,6 +28,7 @@ import SchoolOutlinedIcon from '@material-ui/icons/SchoolOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
 import { ERole } from '../types/ERole';
+import { useSession } from 'next-auth/client';
 
 const drawerWidth = 240;
 
@@ -214,6 +215,20 @@ export default function LeftMenu({
                         <Link href={PAGES.testRedux.path}>
                             <a className={classes.link}>
                                 <ListItemText primary={PAGES.testRedux.title} />
+                            </a>
+                        </Link>
+                    </ListItem>
+
+                    <ListItem button key={PAGES.testUpload.path}>
+                        <CropFreeOutlinedIcon />
+                        <Link
+                            as={`${PAGES.testUpload.path}/${currentId}`}
+                            href={`${PAGES.testUpload.path}/[test_upload]`}
+                        >
+                            <a className={classes.link}>
+                                <ListItemText
+                                    primary={PAGES.testUpload.title}
+                                />
                             </a>
                         </Link>
                     </ListItem>

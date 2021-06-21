@@ -19,6 +19,11 @@ export const PAGES = {
         path: '/test_mui',
         title: 'Test Mongo & MUI Integration Page',
     },
+    testUpload: {
+        id: 'testUpload',
+        path: '/test_upload',
+        title: 'Test Upload Page',
+    },
     adminpage: {
         id: 'adminpage',
         path: '/admin',
